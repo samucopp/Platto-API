@@ -2,15 +2,15 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/sequelize.js";
 
 
-const Staff = sequelize.define("Staff", {
-    staff_id: {
+const User = sequelize.define("User", {
+    user_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
         unique: true
     },
-    staff_name: {
+    user_name: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
@@ -25,4 +25,4 @@ const Staff = sequelize.define("Staff", {
     }
 })
 
-export default Staff;
+export default User;

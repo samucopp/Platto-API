@@ -13,7 +13,7 @@ const CommandDetails = sequelize.define("Command_details", {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     },
-    staff_id: {
+    user_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     },

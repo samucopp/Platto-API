@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/sequelize.js";
 import tableModel from "./tableModel.js";
-import staffModel from "./staffModel.js";
+import userModel from "./userModel.js";
 import menuModel from "./menuModel.js";
 import commandDetailsModel from "./commandDetailsModel.js";
 
@@ -31,7 +31,7 @@ const Command = sequelize.define("Command", {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     },
-    staff_id: {
+    user_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     },
@@ -50,8 +50,8 @@ export default Command;
 tableModel.hasMany(Command, {foreignKey: 'table_id'});
 Command.belongsTo(tableModel, {foreignKey: 'table_id'});
 
-staffModel.hasMany(Command, {foreignKey: 'staff_id'});
-Command.belongsTo(staffModel, {foreignKey: 'staff_id'});
+userModel.hasMany(Command, {foreignKey: 'user_id'});
+Command.belongsTo(userModel, {foreignKey: 'user_id'});
 
 Command.belongsToMany(menuModel, {through: commandDetailsModel, foreignKey: 'command_id'});
 menuModel.belongsToMany(Command, {through: commandDetailsModel, foreignKey: 'menu_id'});
