@@ -1,4 +1,3 @@
-import { parse } from "micromatch";
 import menuController from "./menuController.js";
 
 async function getAll(req, res) {

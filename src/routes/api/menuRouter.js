@@ -1,5 +1,5 @@
 import { Router } from "express";
-import menuApiController from "./menuApiController.js";
+import menuApiController from "../../controllers/menu/menuApiController.js";
 
 const router = Router();
 

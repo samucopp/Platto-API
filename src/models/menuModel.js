@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../config/sequelize.js";
+import sequelize from "../../src/config/sequelize.js";
 import menuCategoryModel from "./menuCategoryModel.js";
 
 const Menu = sequelize.define("Menu", {

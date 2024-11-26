@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../config/sequelize.js";
+import sequelize from "../../src/config/sequelize.js";
 import tableModel from "./tableModel.js";
 import userModel from "./userModel.js";
 import menuModel from "./menuModel.js";

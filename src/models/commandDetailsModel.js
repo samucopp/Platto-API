@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../config/sequelize.js";
+import sequelize from "../../src/config/sequelize.js";
 
 
 const CommandDetails = sequelize.define("Command_details", {

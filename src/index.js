@@ -26,6 +26,6 @@ app.use(session({
 
 app.use('/', router);// configurar rutas
 
-app.listen(process.env.PORT, () => {
-    console.log(`Servidor escuchando en http://localhost:${process.env.PORT}`);
+app.listen(process.env.APP_PORT, () => {
+    console.log(`Servidor escuchando en http://localhost:${process.env.APP_PORT}`);
 });// iniciar servidor en el puerto indicado en las variables de entorno
