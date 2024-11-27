@@ -13,6 +13,7 @@ const MenuCategory = sequelize.define("Menu_category", {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true
     }
 })
 

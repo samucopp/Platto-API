@@ -18,7 +18,7 @@ async function getById(id) {
 async function create(name, price, category_id, description, allergens) {
     const newMenu = await menuModel.create({
         name,
-        price: price*100,
+        price,
         category_id,
         description,
         allergens
@@ -29,7 +29,7 @@ async function create(name, price, category_id, description, allergens) {
 async function update(id, name, price, category_id, description, allergens) {
     const menu = await menuModel.findByPk(id);
     menu.name = name;
-    menu.price = price*100;
+    menu.price = price;
     menu.category_id = category_id;
     menu.description = description;
     menu.allergens = allergens;
