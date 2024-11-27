@@ -14,7 +14,7 @@ app.use(express.static('src/public')); // configurar directorio de archivos est�
 app.use(express.urlencoded({ extended: true }));// configurar body parser para recibir datos de formularios
 app.use(express.json());// configurar body parser para recibir datos en formato json
 
-app.use(session({
+/* app.use(session({
     secret: process.env.SECRET,// clave para cifrar la cookie
     resave: false,// no guardar la cookie en cada petición
     saveUninitialized: false,// no guardar la cookie si no se inicializa
@@ -22,10 +22,10 @@ app.use(session({
         secure: false,// true para https
         maxAge: 1000 * 60 * 60 * 24 * 7// tiempo de vida de la cookie en milisegundos
         }
-}));// configurar sesión 
+}));// configurar sesión  */
 
 app.use('/', router);// configurar rutas
 
-app.listen(process.env.APP_PORT, () => {
-    console.log(`Servidor escuchando en http://localhost:${process.env.APP_PORT}`);
+app.listen(3000, () => {
+    console.log(`Servidor escuchando en http://localhost:3000`);
 });// iniciar servidor en el puerto indicado en las variables de entorno
