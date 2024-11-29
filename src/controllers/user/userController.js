@@ -1,6 +1,6 @@
 import userModel from "../../models/userModel.js";
 import error from "../../helpers/errors.js";
-import { hashPassword } from "../../helpers/bcrypt.js";
+import { hashPassword } from "../../config/bcrypt.js";
 
 async function getAll() {
     const users = await userModel.findAll();
@@ -52,7 +52,7 @@ async function update(id, user_name, password, role) {
 
 async function remove(id) {
     const userToRemove = await userModel.findByPk(id);
-    if(!user) {
+    if(!userToRemove) {
         throw new error.USER_NOT_FOUND();
     }
     await userToRemove.destroy();
