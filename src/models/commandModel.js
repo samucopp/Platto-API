@@ -35,6 +35,10 @@ const Command = sequelize.define("Command", {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     },
+    pax: {
+        type: DataTypes.SMALLINT.UNSIGNED,
+        allowNull: false
+    },
     notes: {
         type: DataTypes.STRING,
         allowNull: true

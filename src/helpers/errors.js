@@ -4,6 +4,14 @@ class USER_NOT_FOUND extends Error {
         this.status = 404;
     }
 }
+
+class COMMAND_NOT_FOUND extends Error {
+    constructor() {
+        super("Comanda no encontrada");
+        this.status = 404;
+    }
+}
+
 class PASSWORD_NOT_MATCH extends Error {
     constructor() {
         super("Contraseñas no coinciden");
@@ -34,6 +42,7 @@ class INVALID_CREDENTIALS extends Error {
 
 export const errors = {
     USER_NOT_FOUND,
+    COMMAND_NOT_FOUND,
     PASSWORD_NOT_MATCH,
     USER_ALREADY_EXISTS,
     USERNAME_ALREADY_EXISTS,

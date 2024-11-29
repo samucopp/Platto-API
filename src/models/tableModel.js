@@ -11,7 +11,7 @@ const Table = sequelize.define("Table", {
         unique: true
     },
     capacity: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.SMALLINT.UNSIGNED,
         allowNull: false,
     },
     status: {
