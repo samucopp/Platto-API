@@ -25,6 +25,20 @@ async function getOne(req, res) {
     }
 };
 
+async function getFullOne(req, res) {
+    try {
+        const id = parseInt(req.params.id);
+        const command = await commandController.getByIdFull(id);
+        if(!command) {
+            return res.status(404).json({error:"Command not found"});
+        }
+        res.status(200).json(command);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
 async function create(req, res) {
     try {
         const { table_id, user_id, pax, notes } = req.body;
@@ -45,7 +59,7 @@ async function create(req, res) {
 async function update(req, res) {
     try {
         const id = parseInt(req.params.id);
-        const { table_id, user_id, date, status, pax, notes, discount } = req.body;
+        const { date, status, table_id, user_id, pax, notes, discount } = req.body;
         const updatedCommand = await commandController.update(id, date, status, table_id, user_id, pax, notes, discount);
         res.status(200).json({command:updatedCommand});
     } catch (error) {
@@ -75,12 +89,84 @@ async function remove(req, res) {
     }
 };
 
+async function close (req, res) {
+    try {
+        const command_id = parseInt(req.params.id);
+        const closedCommand = await commandController.closeCommand(command_id);
+        res.status(200).json({command:closedCommand});
+    } catch (error) {
+        console.log(error);
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
+    }
+};
+
+async function addProduct(req, res) {
+    try {
+        const command_id = parseInt(req.params.id);
+        const { product_id, quantity } = req.body;
+        const addedProduct = await commandController.addProduct(command_id, product_id, quantity);
+        res.status(200).json({command:addedProduct});
+    } catch (error) {
+        console.log(error);
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
+    }
+};
+
+async function updateProduct(req, res) {
+    try {
+        const command_id = parseInt(req.params.id);
+        const { product_id, quantity } = req.body;
+        const updatedProduct = await commandController.updateProduct(command_id, product_id, quantity);
+        res.status(200).json({command:updatedProduct});
+    } catch (error) {
+        console.log(error);
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
+    }
+};
+
+async function removeProduct(req, res) {
+    try {
+        const command_id = parseInt(req.params.id);
+        const { product_id } = req.body;
+        const removedProduct = await commandController.removeProduct(command_id, product_id);
+        res.status(200).json({command:removedProduct});
+    } catch (error) {
+        console.log(error);
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
+    }
+};
+
 export const functions = {
     getAll,
     getOne,
+    getFullOne,
     create,
     update,
-    remove
+    remove,
+    close,
+    addProduct,
+    updateProduct,
+    removeProduct
 }
 
 export default functions;

@@ -13,6 +13,13 @@ async function getById(id) {
     return command;
 };
 
+async function getByIdFull(id) {
+    const command = await commandModel.findByPk(id, {
+        include: productModel
+    });
+    return command;
+};
+
 async function create(table_id, user_id, pax, notes=null) {
     const date = new Date();
     const newTime = helper.selectDayOrNight(date);
@@ -58,27 +65,51 @@ async function remove(id) {
     return commandToRemove;
 };
 
-/* async function addProducts(client_id,dish_id,quantity){
-    const order = await getOrCreateOpenOrderByClient(client_id);
-    const dish = order.dishes?.find(d =>d.dish_id===dish_id);
+async function closeCommand(command_id){
+    const command = await getById(command_id);
+    if(!command){
+        throw new error.COMMAND_NOT_FOUND();
+    }
+    command.status = "servido";
+    await command.save();
+    return command;
+}
+
+async function addProduct(command_id,product_id,quantity){
+    const command = await getByIdFull(command_id);
+    const product = command.Products?.find(p =>p.product_id===product_id);
     let totalQuantity = quantity;
-    if(dish){
-        totalQuantity += dish.order_has_dish.quantity;
+    if(product){
+        totalQuantity += product.Command_details.quantity;
     }
-    if(totalQuantity <= 0){
-        await order.removeDish(dish_id);
-    }else{
-        await order.addDish(dish_id,{through:{quantity:totalQuantity}});
-    }
-    return order;
-} */
+    await command.addProduct(product_id,{through:{quantity:totalQuantity}});
+    return command;
+};
+
+async function removeProduct(command_id,product_id){
+    const command = await getByIdFull(command_id);
+    await command.removeProduct(product_id);
+    return command;
+};
+
+async function updateProduct(command_id,product_id,quantity){
+    const command = await getByIdFull(command_id);
+    await command.addProduct(product_id,{through:{quantity:quantity}});
+    return command;
+};
+
 
 export const functions = {
     getAll,
     getById,
+    getByIdFull,
     create,
     update,
-    remove
+    remove,
+    closeCommand,
+    addProduct, 
+    removeProduct,
+    updateProduct
 }
 
 export default functions;

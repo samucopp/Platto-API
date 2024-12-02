@@ -9,14 +9,6 @@ const CommandDetails = sequelize.define("Command_details", {
         primaryKey: true,
         autoIncrement: true
     },
-    table_id: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false
-    },
-    user_id: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false
-    },
     product_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
