@@ -4,6 +4,7 @@ import commandApiController from "../../controllers/command/commandApiController
 const router = Router();
 
 router.get("/", commandApiController.getAll);
+router.get("/complete", commandApiController.getFullAll);
 router.get("/:id", commandApiController.getOne);
 router.get("/:id/details", commandApiController.getFullOne);
 

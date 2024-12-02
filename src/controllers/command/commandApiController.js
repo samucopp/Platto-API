@@ -11,6 +11,16 @@ async function getAll(req, res) {
     }
 };
 
+async function getFullAll(req, res) {
+    try {
+        const commands = await commandController.getFullAll();
+        res.status(200).json(commands);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
 async function getOne(req, res) {
     try {
         const id = parseInt(req.params.id);
@@ -158,6 +168,7 @@ async function removeProduct(req, res) {
 
 export const functions = {
     getAll,
+    getFullAll,
     getOne,
     getFullOne,
     create,

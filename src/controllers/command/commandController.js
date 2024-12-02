@@ -2,9 +2,17 @@ import commandModel from "../../models/commandModel.js";
 import error from "../../helpers/errors.js";
 import helper from "../../helpers/functions.js";
 import productModel from "../../models/productModel.js"
+import { get } from "mongoose";
 
 async function getAll() {
     const commands = await commandModel.findAll();
+    return commands;
+};
+
+async function getFullAll() {
+    const commands = await commandModel.findAll({
+        include: productModel
+    });
     return commands;
 };
 
@@ -101,6 +109,7 @@ async function updateProduct(command_id,product_id,quantity){
 
 export const functions = {
     getAll,
+    getFullAll,
     getById,
     getByIdFull,
     create,
