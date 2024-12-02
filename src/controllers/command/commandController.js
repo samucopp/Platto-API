@@ -1,6 +1,7 @@
 import commandModel from "../../models/commandModel.js";
 import error from "../../helpers/errors.js";
 import helper from "../../helpers/functions.js";
+import productModel from "../../models/productModel.js"
 
 async function getAll() {
     const commands = await commandModel.findAll();
@@ -56,6 +57,21 @@ async function remove(id) {
     await commandToRemove.destroy();
     return commandToRemove;
 };
+
+/* async function addProducts(client_id,dish_id,quantity){
+    const order = await getOrCreateOpenOrderByClient(client_id);
+    const dish = order.dishes?.find(d =>d.dish_id===dish_id);
+    let totalQuantity = quantity;
+    if(dish){
+        totalQuantity += dish.order_has_dish.quantity;
+    }
+    if(totalQuantity <= 0){
+        await order.removeDish(dish_id);
+    }else{
+        await order.addDish(dish_id,{through:{quantity:totalQuantity}});
+    }
+    return order;
+} */
 
 export const functions = {
     getAll,

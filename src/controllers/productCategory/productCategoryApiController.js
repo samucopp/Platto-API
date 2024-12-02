@@ -1,9 +1,9 @@
-import menuCategoryController from "./menuCategoryController.js";
+import productCategoryController from "./productCategoryController.js";
 
 async function getAll(req, res) {
     try {
-        const menuCategories = await menuCategoryController.getAll();
-        res.status(200).json(menuCategories);
+        const productCategories = await productCategoryController.getAll();
+        res.status(200).json(productCategories);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });
@@ -13,11 +13,11 @@ async function getAll(req, res) {
 async function getOne(req, res) {
     try {
         const id = parseInt(req.params.id);
-        const menuCategory = await menuCategoryController.getById(id);
-        if(!menuCategory) {
+        const productCategory = await productCategoryController.getById(id);
+        if(!productCategory) {
             return res.status(404).json({error:"Category not found"});
         }
-        res.status(200).json(menuCategory);
+        res.status(200).json(productCategory);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });
@@ -27,8 +27,8 @@ async function getOne(req, res) {
 async function create(req, res) {
     try {
         const { name } = req.body;
-        const newMenuCategory = await menuCategoryController.create(name);
-        res.status(201).json({menuCategory:newMenuCategory});
+        const newProductCategory = await productCategoryController.create(name);
+        res.status(201).json({productCategory:newProductCategory});
     } catch (error) {
         console.log(error);
         if(error.status) {
@@ -44,8 +44,8 @@ async function update(req, res) {
     try {
         const id = parseInt(req.params.id);
         const { name } = req.body;
-        const updatedMenuCategory = await menuCategoryController.update(id, name);
-        res.status(200).json({menuCategory:updatedMenuCategory});
+        const updatedProductCategory = await productCategoryController.update(id, name);
+        res.status(200).json({productCategory:updatedProductCategory});
     } catch (error) {
         console.log(error);
         if(error.status) {
@@ -60,8 +60,8 @@ async function update(req, res) {
 async function remove(req, res) {
     try {
         const id = parseInt(req.params.id);
-        const removedMenuCategory = await menuCategoryController.remove(id);
-        res.status(200).json({menuCategory:removedMenuCategory});
+        const removedProductCategory = await productCategoryController.remove(id);
+        res.status(200).json({productCategory:removedProductCategory});
     } catch (error) {
         console.log(error);
         if(error.status) {

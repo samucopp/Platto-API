@@ -17,7 +17,7 @@ const CommandDetails = sequelize.define("Command_details", {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     },
-    menu_id: {
+    product_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     },

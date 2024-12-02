@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../../src/config/sequelize.js";
 import tableModel from "./tableModel.js";
 import userModel from "./userModel.js";
-import menuModel from "./menuModel.js";
+import productModel from "./productModel.js";
 import commandDetailsModel from "./commandDetailsModel.js";
 
 const Command = sequelize.define("Command", {
@@ -57,5 +57,5 @@ Command.belongsTo(tableModel, {foreignKey: 'table_id'});
 userModel.hasMany(Command, {foreignKey: 'user_id'});
 Command.belongsTo(userModel, {foreignKey: 'user_id'});
 
-Command.belongsToMany(menuModel, {through: commandDetailsModel, foreignKey: 'command_id'});
-menuModel.belongsToMany(Command, {through: commandDetailsModel, foreignKey: 'menu_id'});
+Command.belongsToMany(productModel, {through: commandDetailsModel, foreignKey: 'command_id'});
+productModel.belongsToMany(Command, {through: commandDetailsModel, foreignKey: 'product_id'});

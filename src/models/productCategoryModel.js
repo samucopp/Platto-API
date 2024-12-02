@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/sequelize.js";
 
 
-const MenuCategory = sequelize.define("Menu_category", {
+const ProductCategory = sequelize.define("Product_category", {
     category_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
@@ -17,4 +17,4 @@ const MenuCategory = sequelize.define("Menu_category", {
     }
 })
 
-export default MenuCategory;
+export default ProductCategory;

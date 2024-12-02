@@ -1,9 +1,9 @@
-import menuController from "./menuController.js";
+import productController from "./productController.js";
 
 async function getAll(req, res) {
     try {
-    const menus = await menuController.getAll();
-    res.status(200).json(menus);
+    const products = await productController.getAll();
+    res.status(200).json(products);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });
@@ -13,11 +13,11 @@ async function getAll(req, res) {
 async function getOne(req, res) {
     try {
         const id = parseInt(req.params.id);
-        const menu = await menuController.getById(id);
-        if(!menu) {
-            return res.status(404).json({error:"Menu not found"});
+        const product = await productController.getById(id);
+        if(!product) {
+            return res.status(404).json({error:"Product not found"});
         }
-        res.status(200).json(menu);
+        res.status(200).json(product);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });
@@ -27,8 +27,8 @@ async function getOne(req, res) {
 async function create(req, res) {
     try {
         const { name, price, category_id, description, allergens } = req.body;
-        const newMenu = await menuController.create(name, price, category_id, description, allergens);
-        res.status(201).json({menu:newMenu});
+        const newProduct = await productController.create(name, price, category_id, description, allergens);
+        res.status(201).json({product:newProduct});
     } catch (error) {
         console.log(error);
         if(error.status) {
@@ -44,8 +44,8 @@ async function update(req, res) {
     try {
         const id = parseInt(req.params.id);
         const { name, price, category_id, description, allergens } = req.body;
-        const updatedMenu = await menuController.update(id, name, price, category_id, description, allergens);
-        res.status(200).json({menu:updatedMenu});
+        const updatedProduct = await productController.update(id, name, price, category_id, description, allergens);
+        res.status(200).json({product:updatedProduct});
     } catch (error) {
         console.log(error);
         if(error.status) {
@@ -60,8 +60,8 @@ async function update(req, res) {
 async function remove(req, res) {
     try {
         const id = parseInt(req.params.id);
-        const removedMenu = await menuController.remove(id);
-        res.status(200).json({menu:removedMenu});
+        const removedProduct = await productController.remove(id);
+        res.status(200).json({product:removedProduct});
     } catch (error) {
         console.log(error);
         if(error.status) {

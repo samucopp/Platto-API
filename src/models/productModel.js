@@ -1,9 +1,9 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../../src/config/sequelize.js";
-import menuCategoryModel from "./menuCategoryModel.js";
+import sequelize from "../config/sequelize.js";
+import productCategoryModel from "./productCategoryModel.js";
 
-const Menu = sequelize.define("Menu", {
-    menu_id: {
+const Product = sequelize.define("Product", {
+    product_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
         primaryKey: true,
@@ -32,7 +32,7 @@ const Menu = sequelize.define("Menu", {
     }
 })
 
-export default Menu;
+export default Product;
 
-menuCategoryModel.hasMany(Menu, {foreignKey: 'category_id'});
-Menu.belongsTo(menuCategoryModel, {foreignKey: 'category_id'});
+productCategoryModel.hasMany(Product, {foreignKey: 'category_id'});
+Product.belongsTo(productCategoryModel, {foreignKey: 'category_id'});
