@@ -27,8 +27,9 @@ async function getOne(req, res) {
 
 async function create(req, res) {
     try {
-        const { table_id, user_id, date, time, status, pax, notes, discount } = req.body;
-        const newCommand = await commandController.create(table_id, user_id, date, time, status, pax, notes, discount);
+        const { table_id, user_id, pax, notes } = req.body;
+        //const user_id = req.user_id;
+        const newCommand = await commandController.create(table_id, user_id, pax, notes);
         res.status(201).json({command:newCommand});
     } catch (error) {
         console.log(error);
@@ -44,8 +45,8 @@ async function create(req, res) {
 async function update(req, res) {
     try {
         const id = parseInt(req.params.id);
-        const { table_id, user_id, date, time, status, pax, notes, discount } = req.body;
-        const updatedCommand = await commandController.update(id, table_id, user_id, date, time, status, pax, notes, discount);
+        const { table_id, user_id, date, status, pax, notes, discount } = req.body;
+        const updatedCommand = await commandController.update(id, date, status, table_id, user_id, pax, notes, discount);
         res.status(200).json({command:updatedCommand});
     } catch (error) {
         console.log(error);

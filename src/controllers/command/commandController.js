@@ -1,5 +1,6 @@
 import commandModel from "../../models/commandModel.js";
 import error from "../../helpers/errors.js";
+import helper from "../../helpers/functions.js";
 
 async function getAll() {
     const commands = await commandModel.findAll();
@@ -11,33 +12,38 @@ async function getById(id) {
     return command;
 };
 
-async function create(date, time, status, table_id, user_id, pax, notes=null, discount=null) {
+async function create(table_id, user_id, pax, notes=null) {
+    const date = new Date();
+    const newTime = helper.selectDayOrNight(date);
     const command = await commandModel.create({
-        date,
-        time,
-        status,
+        time: newTime,
         table_id,
         user_id,
         pax,
-        notes,
-        discount
+        notes
     });
     return command;
 };
 
-async function update(id, date, time, status, table_id, user_id, pax, notes=null, discount=null) {
+async function update(id, date, status, table_id, user_id, pax, notes=null, discount=null) {
     const command = await commandModel.findByPk(id);
     if(!command) {
         throw new error.COMMAND_NOT_FOUND();
     }
     command.date = date;
-    command.time = time;
+    const newDate = new Date(date);
+    const newTime = helper.selectDayOrNight(newDate);
+    command.time = newTime;
     command.status = status;
     command.table_id = table_id;
     command.user_id = user_id;
     command.pax = pax;
-    command.notes = notes;
-    command.discount = discount;
+    if(notes){
+        command.notes = notes;
+    }
+    if(discount) {
+        command.discount = discount;
+    }
     await command.save();
     return command;
 };
