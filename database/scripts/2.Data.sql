@@ -22,9 +22,9 @@ VALUES
 
 INSERT INTO `Platto_database`.`User` (`user_name`, `password`, `role`)
 VALUES 
-('umpa_lumpa1', '4321', 'camarero'),
-('umpa_lumpa2', '4321', 'cocinero'),
-('administrador', '1234', 'admin');
+('umpa_lumpa1', '$2a$10$wikYqklu1hy0sFFJ1Hu81eidrFoAiP5wNvvQUgD0t5plLmI86o6/W', 'camarero'),
+('umpa_lumpa2', '$2a$10$wikYqklu1hy0sFFJ1Hu81eidrFoAiP5wNvvQUgD0t5plLmI86o6/W', 'cocinero'),
+('administrador', '$2a$10$wikYqklu1hy0sFFJ1Hu81eidrFoAiP5wNvvQUgD0t5plLmI86o6/W', 'admin');
 
 INSERT INTO `Platto_database`.`Command` (`date`, `time`, `status`, `table_id`, `user_id`, `notes`, `discount`, `pax`)
 VALUES 
