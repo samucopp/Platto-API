@@ -29,38 +29,6 @@ async function isAdmin(req,res,next){
     next();
 }
 
-async function isWaiter(req,res,next){
-    const authorization = req.headers.authorization;
-    if(!authorization){
-        return res.status(401).json({error:"jwt token needed"});
-    }
-    const token = authorization.replace("Bearer ","");
-    const verified = jwt.verify(token);
-    if(verified.error){
-        return res.status(401).json({error:"jwt token not correct"});
-    }
-    if(!verified.role || verified.role !== "camarero"){
-        return res.status(403).json({error:"not allowed"});
-    }
-    next();
-};
-
-async function isChef(req,res,next){
-    const authorization = req.headers.authorization;
-    if(!authorization){
-        return res.status(401).json({error:"jwt token needed"});
-    }
-    const token = authorization.replace("Bearer ","");
-    const verified = jwt.verify(token);
-    if(verified.error){
-        return res.status(401).json({error:"jwt token not correct"});
-    }
-    if(!verified.role || verified.role !== "cocinero"){
-        return res.status(403).json({error:"not allowed"});
-    }
-    next();
-};
-
 async function isAdminOrWaiter(req,res,next){
     const authorization = req.headers.authorization;
     if(!authorization){
@@ -95,11 +63,11 @@ async function isAdminOrChef(req,res,next){
     next();
 }
 
-export {
+export const functions = {
     isAuthenticated,
     isAdmin,
-    isChef,
-    isWaiter,
     isAdminOrChef,
     isAdminOrWaiter
 }
+
+export default functions;

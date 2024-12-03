@@ -1,16 +1,16 @@
 import { Router } from "express";
 import productApiController from "../../controllers/product/productApiController.js";
-import { isAdminOrChef, isAuthenticated } from "../../middleware/api/authMiddleware.js";
+import middleware from "../../middleware/api/authMiddleware.js";
 
 const router = Router();
 
-router.get("/", isAuthenticated, productApiController.getAll);
-router.get("/:id", isAuthenticated, productApiController.getOne);
+router.get("/", middleware.isAuthenticated, productApiController.getAll);
+router.get("/:id", middleware.isAuthenticated, productApiController.getOne);
 
-router.post("/", isAdminOrChef, productApiController.create);
+router.post("/", middleware.isAdminOrChef, productApiController.create);
 
-router.put("/:id", isAdminOrChef, productApiController.update);
+router.put("/:id", middleware.isAdminOrChef, productApiController.update);
 
-router.delete("/:id", isAdminOrChef, productApiController.remove);
+router.delete("/:id", middleware.isAdminOrChef, productApiController.remove);
 
 export default router;

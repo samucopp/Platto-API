@@ -1,16 +1,16 @@
 import { Router } from "express";
 import productCategoryApiController from "../../controllers/productCategory/productCategoryApiController.js";
-import { isAdminOrChef, isAuthenticated } from "../../middleware/api/authMiddleware.js";
+import middleware from "../../middleware/api/authMiddleware.js";
 
 const router = Router();
 
-router.get("/", isAuthenticated, productCategoryApiController.getAll);
-router.get("/:id", isAuthenticated, productCategoryApiController.getOne);
+router.get("/", middleware.isAuthenticated, productCategoryApiController.getAll);
+router.get("/:id", middleware.isAuthenticated, productCategoryApiController.getOne);
 
-router.post("/", isAdminOrChef, productCategoryApiController.create);
+router.post("/", middleware.isAdminOrChef, productCategoryApiController.create);
 
-router.put("/:id", isAdminOrChef, productCategoryApiController.update);   
+router.put("/:id", middleware.isAdminOrChef, productCategoryApiController.update);   
 
-router.delete("/:id", isAdminOrChef, productCategoryApiController.remove);
+router.delete("/:id", middleware.isAdminOrChef, productCategoryApiController.remove);
 
 export default router;

@@ -14,7 +14,7 @@ class COMMAND_NOT_FOUND extends Error {
 
 class PASSWORD_NOT_MATCH extends Error {
     constructor() {
-        super("Contraseñas no coinciden");
+        super("Las contraseñas no coinciden");
         this.status = 400;
     }
 }
@@ -39,6 +39,7 @@ class INVALID_CREDENTIALS extends Error {
         this.status = 401;
     }
 }
+
 
 export const errors = {
     USER_NOT_FOUND,
