@@ -29,7 +29,7 @@ async function isAdmin(req,res,next){
     next();
 }
 
-async function isAdminOrSelfUser(req,res,next){
+async function isWaiter(req,res,next){
     const authorization = req.headers.authorization;
     if(!authorization){
         return res.status(401).json({error:"jwt token needed"});
@@ -39,8 +39,56 @@ async function isAdminOrSelfUser(req,res,next){
     if(verified.error){
         return res.status(401).json({error:"jwt token not correct"});
     }
-    const id = parseInt(req.params.id);
-    if((!verified.role || verified.role !== "admin")&& id!=verified.user_id){
+    if(!verified.role || verified.role !== "camarero"){
+        return res.status(403).json({error:"not allowed"});
+    }
+    next();
+};
+
+async function isChef(req,res,next){
+    const authorization = req.headers.authorization;
+    if(!authorization){
+        return res.status(401).json({error:"jwt token needed"});
+    }
+    const token = authorization.replace("Bearer ","");
+    const verified = jwt.verify(token);
+    if(verified.error){
+        return res.status(401).json({error:"jwt token not correct"});
+    }
+    if(!verified.role || verified.role !== "cocinero"){
+        return res.status(403).json({error:"not allowed"});
+    }
+    next();
+};
+
+async function isAdminOrWaiter(req,res,next){
+    const authorization = req.headers.authorization;
+    if(!authorization){
+        return res.status(401).json({error:"jwt token needed"});
+    }
+    const token = authorization.replace("Bearer ","");
+    const verified = jwt.verify(token);
+    if(verified.error){
+        return res.status(401).json({error:"jwt token not correct"});
+    }
+    if((!verified.role || (verified.role !== "admin" && verified.role !== "camarero"))){
+        return res.status(403).json({error:"not allowed"});
+    }
+
+    next();
+}
+
+async function isAdminOrChef(req,res,next){
+    const authorization = req.headers.authorization;
+    if(!authorization){
+        return res.status(401).json({error:"jwt token needed"});
+    }
+    const token = authorization.replace("Bearer ","");
+    const verified = jwt.verify(token);
+    if(verified.error){
+        return res.status(401).json({error:"jwt token not correct"});
+    }
+    if((!verified.role || (verified.role !== "admin" && verified.role !== "cocinero"))){
         return res.status(403).json({error:"not allowed"});
     }
 
@@ -50,5 +98,8 @@ async function isAdminOrSelfUser(req,res,next){
 export {
     isAuthenticated,
     isAdmin,
-    isAdminOrSelfUser
+    isChef,
+    isWaiter,
+    isAdminOrChef,
+    isAdminOrWaiter
 }
