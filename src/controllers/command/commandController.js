@@ -2,7 +2,10 @@ import commandModel from "../../models/commandModel.js";
 import error from "../../helpers/errors.js";
 import helper from "../../helpers/functions.js";
 import productModel from "../../models/productModel.js"
+import userModel from "../../models/userModel.js"
 import { get } from "mongoose";
+import ProductCategoryModel from "../../models/productCategoryModel.js";
+import historyModel from "../../models/historyModel.js";
 
 async function getAll() {
     const commands = await commandModel.findAll();
@@ -16,6 +19,11 @@ async function getFullAll() {
     return commands;
 };
 
+async function getHistory() {
+    const commands = await historyModel.find();
+    return commands;
+}
+
 async function getById(id) {
     const command = await commandModel.findByPk(id);
     return command;
@@ -23,9 +31,14 @@ async function getById(id) {
 
 async function getByIdFull(id) {
     const command = await commandModel.findByPk(id, {
-        include: productModel
+        include: [
+            {model: productModel,
+                include: ProductCategoryModel
+            },
+            userModel]
     });
-    return command;
+    const cleanCommand = helper.cleanData(command);
+    return cleanCommand;
 };
 
 async function create(table_id, user_id, pax, notes=null) {
@@ -80,6 +93,8 @@ async function closeCommand(command_id){
     }
     command.status = "servido";
     await command.save();
+    const commandToSave = await getByIdFull(command_id);
+    await historyModel.create(commandToSave);
     return command;
 }
 
@@ -110,6 +125,7 @@ async function updateProduct(command_id,product_id,quantity){
 export const functions = {
     getAll,
     getFullAll,
+    getHistory,
     getById,
     getByIdFull,
     create,
