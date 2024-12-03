@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 
-
-// Esquema para los productos
 const productSchema = new mongoose.Schema({
     category_id: { type: Number, required: true },
     category_name: { type: String, required: true },
@@ -14,7 +12,6 @@ const productSchema = new mongoose.Schema({
     subtotal: { type: Number, required: true },
 });
 
-// Esquema para las órdenes
 const historySchema = new mongoose.Schema({
     command_id: { type: Number, required: true },
     date: { type: Date, required: true },
@@ -29,7 +26,6 @@ const historySchema = new mongoose.Schema({
     Products: { type: [productSchema], required: true },
 });
 
-// Crear el modelo
 const History = mongoose.model('History', historySchema);
 
 export default History;

@@ -48,7 +48,7 @@ async function getOne(req, res) {
 async function getFullOne(req, res) {
     try {
         const id = parseInt(req.params.id);
-        const command = await commandController.getByIdFull(id);
+        const command = await commandController.getByIdFull(id, true);
         if(!command) {
             return res.status(404).json({error:"Command not found"});
         }
