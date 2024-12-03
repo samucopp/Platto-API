@@ -5,7 +5,7 @@ dotenv.config();
 
 const db = mongoose.connection;
 
-mongoose.connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, {
+mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${27017}/${process.env.MONGO_DATABASE}?authSource=admin`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -13,7 +13,7 @@ mongoose.connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${proc
 db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', () => {
-    console.log('Conectado a la base de datos');
+    console.log('Conectado a la base de datos de mongo');
 });
 
 export default db;
