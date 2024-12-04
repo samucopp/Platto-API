@@ -5,6 +5,13 @@ class USER_NOT_FOUND extends Error {
     }
 }
 
+class PRODUCT_NOT_FOUND extends Error {
+    constructor() {
+        super("Producto no encontrado");
+        this.status = 404;
+    }
+}
+
 class COMMAND_NOT_FOUND extends Error {
     constructor() {
         super("Comanda no encontrada");
@@ -33,6 +40,13 @@ class USERNAME_ALREADY_EXISTS extends Error {
     }
 }
 
+class PRODUCT_ALREADY_EXISTS extends Error {
+    constructor() {
+        super("Ya existe un producto con ese nombre");
+        this.status = 409;
+    }
+}
+
 class TABLE_ALREADY_IN_USE extends Error {
     constructor() {
         super("La mesa ya está ocupada");
@@ -50,12 +64,14 @@ class INVALID_CREDENTIALS extends Error {
 
 export const errors = {
     USER_NOT_FOUND,
+    PRODUCT_NOT_FOUND,
     COMMAND_NOT_FOUND,
     PASSWORD_NOT_MATCH,
     USER_ALREADY_EXISTS,
     USERNAME_ALREADY_EXISTS,
     INVALID_CREDENTIALS,
-    TABLE_ALREADY_IN_USE
+    TABLE_ALREADY_IN_USE,
+    PRODUCT_ALREADY_EXISTS
 };
 
 export default errors;
