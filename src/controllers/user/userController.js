@@ -9,6 +9,9 @@ async function getAll() {
 
 async function getById(id) {
     const user = await userModel.findByPk(id);
+    if(!user) {
+        throw new error.USER_NOT_FOUND();
+    }
     return user;
 };
 
@@ -18,6 +21,9 @@ async function getByName(user_name) {
             user_name: user_name
         }
     });
+    if(!user) {
+        throw new error.USER_NOT_FOUND();
+    };
     return user;
 };
 
@@ -36,10 +42,11 @@ async function create(user_name, password, role) {
 };
 
 async function update(id, user_name, password, role) {
-    const user = await userModel.findByPk(id);
-    if(!user) {
-        throw new error.USER_NOT_FOUND();
-    }
+    const oldUser = await getByName(user_name);
+    if (oldUser) {
+        throw new error.USERNAME_ALREADY_EXISTS();
+    };
+    const user = await getById(id);
     user.user_name = user_name;
     user.role = role;
     if(password) {
@@ -51,10 +58,7 @@ async function update(id, user_name, password, role) {
 };
 
 async function remove(id) {
-    const userToRemove = await userModel.findByPk(id);
-    if(!userToRemove) {
-        throw new error.USER_NOT_FOUND();
-    }
+    const userToRemove = await getById(id);
     await userToRemove.destroy();
     return userToRemove;
 };

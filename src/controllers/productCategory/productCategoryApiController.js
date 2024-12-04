@@ -14,9 +14,6 @@ async function getOne(req, res) {
     try {
         const id = parseInt(req.params.id);
         const productCategory = await productCategoryController.getById(id);
-        if(!productCategory) {
-            return res.status(404).json({error:"Category not found"});
-        }
         res.status(200).json(productCategory);
     } catch (error) {
         console.log(error);

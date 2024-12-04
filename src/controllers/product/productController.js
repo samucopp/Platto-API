@@ -39,10 +39,7 @@ async function create(name, price, category_id, description, allergens) {
 };
 
 async function update(id, name, price, category_id, description, allergens) {
-    const product = await productModel.findByPk(id);
-    if (!product) {
-        throw new error.PRODUCT_NOT_FOUND();
-    };
+    const product = await getById(id);
     const existingProduct = await productModel.findOne({
         where: {
             name: name
@@ -61,10 +58,7 @@ async function update(id, name, price, category_id, description, allergens) {
 };
 
 async function remove(id) {
-    const productToRemove = await productModel.findByPk(id);
-    if (!productToRemove) {
-        throw new error.PRODUCT_NOT_FOUND();
-    };
+    const productToRemove = await getById(id);
     await productToRemove.destroy();
     return productToRemove;
 };

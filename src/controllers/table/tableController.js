@@ -1,4 +1,5 @@
 import tableModel from "../../models/tableModel.js";
+import error from "../../helpers/errors.js";
 
 async function getAll() {
     const tables = await tableModel.findAll();
@@ -7,6 +8,9 @@ async function getAll() {
 
 async function getById(id) {
     const table = await tableModel.findByPk(id);
+    if (!table) {
+        throw new error.TABLE_NOT_FOUND();
+    };
     return table;
 };
 
@@ -18,14 +22,14 @@ async function create(capacity) {
 };
 
 async function update(id, capacity) {
-    const table = await tableModel.findByPk(id);
+    const table = await getById(id);
     table.capacity = capacity;
     await table.save();
     return table;
 };
 
 async function remove(id) {
-    const tableToRemove = await tableModel.findByPk(id);
+    const tableToRemove = await getById(id);
     await tableToRemove.destroy();
     return tableToRemove;
 };

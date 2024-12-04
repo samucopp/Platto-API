@@ -14,9 +14,6 @@ async function getOne(req, res) {
     try {
         const id = parseInt(req.params.id);
         const table = await tableController.getById(id);
-        if(!table) {
-            return res.status(404).json({error:"Table not found"});
-        }
         res.status(200).json(table);
     } catch (error) {
         console.log(error);

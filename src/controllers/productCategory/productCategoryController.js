@@ -1,4 +1,5 @@
 import productCategoryModel from "../../models/productCategoryModel.js";
+import error from "../../helpers/errors.js";
 
 async function getAll() {
     const productCategories = await productCategoryModel.findAll();
@@ -7,10 +8,21 @@ async function getAll() {
 
 async function getById(id) {
     const productCategory = await productCategoryModel.findByPk(id);
+    if (!productCategory) {
+        throw new error.PRODUCT_CATEGORY_NOT_FOUND();
+    }
     return productCategory;
 };
 
 async function create(name) {
+    const oldProductCategory = await productCategoryModel.findOne({
+        where: {
+            name
+        }
+    });
+    if (oldProductCategory) {
+        throw new error.PRODUCT_CATEGORY_ALREADY_EXISTS();
+    };
     const newProductCategory = await productCategoryModel.create({
         name
     });
@@ -18,14 +30,22 @@ async function create(name) {
 };
 
 async function update(id, name) {
-    const productCategory = await productCategoryModel.findByPk(id);
+    const productCategory = await getById(id);
+    const oldProductCategory = await productCategoryModel.findOne({
+        where: {
+            name
+        }
+    });
+    if (oldProductCategory) {
+        throw new error.PRODUCT_CATEGORY_ALREADY_EXISTS();
+    };
     productCategory.name = name;
     await productCategory.save();
     return productCategory;
 };
 
 async function remove(id) {
-    const productCategoryToRemove = await productCategoryModel.findByPk(id);
+    const productCategoryToRemove = await getById(id);
     await productCategoryToRemove.destroy();
     return productCategoryToRemove;
 };

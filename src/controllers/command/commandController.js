@@ -82,10 +82,7 @@ async function create(table_id, user_id, pax, notes = null) {
 };
 
 async function update(id, date, status, table_id, user_id, pax, notes = null, discount = null) {
-    const command = await commandModel.findByPk(id);
-    if (!command) {
-        throw new error.COMMAND_NOT_FOUND();
-    }
+    const command = await getById(id);
     const oldCommand = await commandModel.findOne({
         where: {
             table_id,
@@ -114,10 +111,7 @@ async function update(id, date, status, table_id, user_id, pax, notes = null, di
 };
 
 async function remove(id) {
-    const commandToRemove = await commandModel.findByPk(id);
-    if (!commandToRemove) {
-        throw new error.COMMAND_NOT_FOUND();
-    };
+    const commandToRemove = await getById(id);
     await commandToRemove.destroy();
     return commandToRemove;
 };
