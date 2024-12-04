@@ -23,7 +23,7 @@ async function getFullAll(clean = true) {
     });
     if (clean) {
         return commands.map(command => helper.cleanData(command));
-        }
+    };
     return commands;
 };
 
@@ -34,6 +34,9 @@ async function getHistory() {
 
 async function getById(id) {
     const command = await commandModel.findByPk(id);
+    if (!command) {
+        throw new error.COMMAND_NOT_FOUND();
+    };
     return command;
 };
 
@@ -46,16 +49,28 @@ async function getByIdFull(id, clean = false) {
             },
             userModel]
     });
+    if (!command) {
+        throw new error.COMMAND_NOT_FOUND();
+    };
     if (clean) {
     const cleanCommand = helper.cleanData(command);
     return cleanCommand;
-    }
+    };
     return command;
 };
 
 async function create(table_id, user_id, pax, notes = null) {
     const date = new Date();
     const newTime = helper.selectDayOrNight(date);
+    const oldCommand = await commandModel.findOne({
+        where: {
+            table_id,
+            status: "en preparacion"
+        }
+    });
+    if (oldCommand) {
+        throw new error.TABLE_ALREADY_IN_USE();
+    };
     const command = await commandModel.create({
         time: newTime,
         table_id,
@@ -71,6 +86,15 @@ async function update(id, date, status, table_id, user_id, pax, notes = null, di
     if (!command) {
         throw new error.COMMAND_NOT_FOUND();
     }
+    const oldCommand = await commandModel.findOne({
+        where: {
+            table_id,
+            status: "en preparacion"
+        }
+    });
+    if (oldCommand && oldCommand.id !== id) {
+        throw new error.TABLE_ALREADY_IN_USE();
+    };
     command.date = date;
     const newDate = new Date(date);
     const newTime = helper.selectDayOrNight(newDate);
@@ -93,16 +117,13 @@ async function remove(id) {
     const commandToRemove = await commandModel.findByPk(id);
     if (!commandToRemove) {
         throw new error.COMMAND_NOT_FOUND();
-    }
+    };
     await commandToRemove.destroy();
     return commandToRemove;
 };
 
 async function closeCommand(command_id) {
     const command = await getById(command_id);
-    if (!command) {
-        throw new error.COMMAND_NOT_FOUND();
-    }
     command.status = "servido";
     await command.save();
     const commandToSave = await getByIdFull(command_id, true);
@@ -116,7 +137,7 @@ async function addProduct(command_id, product_id, quantity) {
     let totalQuantity = quantity;
     if (product) {
         totalQuantity += product.Command_details.quantity;
-    }
+    };
     await command.addProduct(product_id, { through: { quantity: totalQuantity } });
     return command;
 };

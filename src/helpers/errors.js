@@ -33,6 +33,13 @@ class USERNAME_ALREADY_EXISTS extends Error {
     }
 }
 
+class TABLE_ALREADY_IN_USE extends Error {
+    constructor() {
+        super("La mesa ya está ocupada");
+        this.status = 409;
+    }
+}
+
 class INVALID_CREDENTIALS extends Error {
     constructor() {
         super("Credenciales inválidas");
@@ -48,6 +55,7 @@ export const errors = {
     USER_ALREADY_EXISTS,
     USERNAME_ALREADY_EXISTS,
     INVALID_CREDENTIALS,
+    TABLE_ALREADY_IN_USE
 };
 
 export default errors;

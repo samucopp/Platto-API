@@ -35,9 +35,6 @@ async function getOne(req, res) {
     try {
         const id = parseInt(req.params.id);
         const command = await commandController.getById(id);
-        if(!command) {
-            return res.status(404).json({error:"Command not found"});
-        }
         res.status(200).json(command);
     } catch (error) {
         console.log(error);
@@ -49,9 +46,6 @@ async function getFullOne(req, res) {
     try {
         const id = parseInt(req.params.id);
         const command = await commandController.getByIdFull(id, true);
-        if(!command) {
-            return res.status(404).json({error:"Command not found"});
-        }
         res.status(200).json(command);
     } catch (error) {
         console.log(error);
