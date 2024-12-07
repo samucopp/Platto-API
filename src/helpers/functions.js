@@ -1,8 +1,8 @@
 function selectDayOrNight(datetime) {
     const hora = datetime.getHours();
-    if (hora >= 12 && hora < 16) {
+    if (hora >= 8 && hora < 18) {
         return "comida";
-    } else if ((hora >= 20 && hora <= 23) || hora === 0) {
+    } else if ((hora >= 19 && hora <= 23) || hora === 0) {
         return "cena";
     }
 };
@@ -38,6 +38,7 @@ function cleanData(data) {
         table_id: data.table_id,
         user_id: data.User.user_id,
         user_name: data.User.user_name,
+        notes: data.notes,
         discount: data.discount,
         total: totalSubtotal,
         Products: productWithSubtotal.map(product => ({
