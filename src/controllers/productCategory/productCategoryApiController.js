@@ -6,7 +6,12 @@ async function getAll(req, res) {
         res.status(200).json(productCategories);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: error.message });
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
     }
 };
 
@@ -17,7 +22,12 @@ async function getOne(req, res) {
         res.status(200).json(productCategory);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: error.message });
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
     }
 };
 

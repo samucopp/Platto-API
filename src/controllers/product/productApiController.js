@@ -4,10 +4,15 @@ async function getAll(req, res) {
     try {
     const products = await productController.getAll();
     res.status(200).json(products);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: error.message });
+} catch (error) {
+    console.log(error);
+    if(error.status) {
+        res.status(error.status);
+    } else {
+        res.status(500);
     }
+    res.json({ error: error.message });
+}
 };
 
 async function getOne(req, res) {
@@ -17,7 +22,12 @@ async function getOne(req, res) {
         res.status(200).json(product);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: error.message });
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
     }
 };
 

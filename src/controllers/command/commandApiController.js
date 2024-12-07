@@ -7,7 +7,12 @@ async function getAll(req, res) {
         res.status(200).json(commands);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: error.message });
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
     }
 };
 
@@ -17,7 +22,12 @@ async function getFullAll(req, res) {
         res.status(200).json(commands);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: error.message });
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
     }
 };
 
@@ -27,7 +37,28 @@ async function getHistory(req, res) {
         res.status(200).json(commands);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: error.message });
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
+    }
+};
+
+async function getHistoryById(req, res) {
+    try {
+        const id = parseInt(req.params.id);
+        const commands = await commandController.getHistoryById(id);
+        res.status(200).json(commands);
+    } catch (error) {
+        console.log(error);
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
     }
 };
 
@@ -38,7 +69,12 @@ async function getOne(req, res) {
         res.status(200).json(command);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: error.message });
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
     }
 };
 
@@ -49,7 +85,12 @@ async function getFullOne(req, res) {
         res.status(200).json(command);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: error.message });
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
     }
 };
 
@@ -73,8 +114,8 @@ async function create(req, res) {
 async function update(req, res) {
     try {
         const id = parseInt(req.params.id);
-        const { date, status, table_id, user_id, pax, notes, discount } = req.body;
-        const updatedCommand = await commandController.update(id, date, status, table_id, user_id, pax, notes, discount);
+        const { date, table_id, user_id, pax, notes, discount } = req.body;
+        const updatedCommand = await commandController.update(id, date, table_id, user_id, pax, notes, discount);
         res.status(200).json({command:updatedCommand});
     } catch (error) {
         console.log(error);
@@ -174,6 +215,7 @@ export const functions = {
     getAll,
     getFullAll,
     getHistory,
+    getHistoryById,
     getOne,
     getFullOne,
     create,

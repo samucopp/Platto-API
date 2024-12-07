@@ -15,6 +15,9 @@ async function getById(id) {
 };
 
 async function create(capacity) {
+    if (typeof capacity !== 'number' || capacity <= 0) {
+        throw new error.INVALID_DATA();
+    };
     const newTable = await tableModel.create({
         capacity
     });
@@ -23,6 +26,9 @@ async function create(capacity) {
 
 async function update(id, capacity) {
     const table = await getById(id);
+    if (typeof capacity !== 'number' || capacity <= 0) {
+        throw new error.INVALID_DATA();
+    };
     table.capacity = capacity;
     await table.save();
     return table;
@@ -30,6 +36,9 @@ async function update(id, capacity) {
 
 async function remove(id) {
     const tableToRemove = await getById(id);
+    if (tableToRemove.status === 'ocupada') {
+        throw new error.TABLE_IN_USE();
+    }
     await tableToRemove.destroy();
     return tableToRemove;
 };

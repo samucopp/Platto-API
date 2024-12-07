@@ -28,14 +28,19 @@ async function create(name, price, category_id, description, allergens) {
     if (existingProduct) {
         throw new error.PRODUCT_ALREADY_EXISTS();
     };
+    const category = await productCategoryModel.findByPk(category_id);
+    if (!category) {
+        throw new error.PRODUCT_CATEGORY_NOT_FOUND();
+    }
     const newProduct = await productModel.create({
         name,
         price,
         category_id,
         description,
-        allergens
+        allergens,
+        category: await productCategoryModel.findByPk(category_id)
     });
-    return newProduct;
+    return { ...newProduct.toJSON(), category };
 };
 
 async function update(id, name, price, category_id, description, allergens) {
@@ -45,9 +50,13 @@ async function update(id, name, price, category_id, description, allergens) {
             name: name
         }
     });
-    if (existingProduct) {
+    if (existingProduct && existingProduct.id !== id && existingProduct.name !== name) {
         throw new error.PRODUCT_ALREADY_EXISTS();
     };
+    const category = await productCategoryModel.findByPk(category_id);
+    if (!category) {
+        throw new error.PRODUCT_CATEGORY_NOT_FOUND();
+    }
     product.name = name;
     product.price = price;
     product.category_id = category_id;

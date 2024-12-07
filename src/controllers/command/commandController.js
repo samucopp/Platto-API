@@ -1,11 +1,11 @@
 import commandModel from "../../models/commandModel.js";
 import error from "../../helpers/errors.js";
 import helper from "../../helpers/functions.js";
-import productModel from "../../models/productModel.js"
-import userModel from "../../models/userModel.js"
-import { get } from "mongoose";
+import productModel from "../../models/productModel.js";
+import userModel from "../../models/userModel.js";
 import ProductCategoryModel from "../../models/productCategoryModel.js";
 import historyModel from "../../models/historyModel.js";
+import tableModel from "../../models/tableModel.js";
 
 async function getAll() {
     const commands = await commandModel.findAll();
@@ -30,6 +30,16 @@ async function getFullAll(clean = true) {
 async function getHistory() {
     const commands = await historyModel.find();
     return commands;
+}
+
+async function getHistoryById(id) {
+    const command = await historyModel.findOne({
+        command_id: id
+    });
+    if (!command) {
+        throw new error.COMMAND_NOT_FOUND();
+    };
+    return command;
 }
 
 async function getById(id) {
@@ -59,9 +69,20 @@ async function getByIdFull(id, clean = false) {
     return command;
 };
 
-async function create(table_id, user_id, pax, notes = null) {
+async function create(table_id, user_id, pax, notes = null, discount = null) {
     const date = new Date();
     const newTime = helper.selectDayOrNight(date);
+    const table = await tableModel.findOne({
+        where: {
+            table_id: table_id
+        }
+    });
+    if (!table) {
+        throw new error.TABLE_NOT_FOUND();
+    };
+    if (pax > table.capacity) {
+        throw new error.EXCEEDS_TABLE_CAPACITY();
+    };
     const oldCommand = await commandModel.findOne({
         where: {
             table_id,
@@ -76,27 +97,37 @@ async function create(table_id, user_id, pax, notes = null) {
         table_id,
         user_id,
         pax,
-        notes
+        notes,
+        discount
     });
     return command;
 };
 
-async function update(id, date, status, table_id, user_id, pax, notes = null, discount = null) {
-    const command = await getById(id);
-    const oldCommand = await commandModel.findOne({
+async function update(id, date, table_id, user_id, pax, notes = null, discount = null) {
+    const table = await tableModel.findOne({
         where: {
-            table_id,
-            status: "en preparacion"
+            table_id: table_id
         }
     });
-    if (oldCommand && oldCommand.id !== id) {
+    if (!table) {
+        throw new error.TABLE_NOT_FOUND();
+    };
+    if (pax > table.capacity) {
+        throw new error.EXCEEDS_TABLE_CAPACITY();
+    };
+    const oldCommand = await commandModel.findOne({
+        where: {
+            table_id: table_id
+        }
+    });
+    if (oldCommand && oldCommand.command_id !== id) {
         throw new error.TABLE_ALREADY_IN_USE();
     };
+    const command = await getById(id);
     command.date = date;
     const newDate = new Date(date);
     const newTime = helper.selectDayOrNight(newDate);
     command.time = newTime;
-    command.status = status;
     command.table_id = table_id;
     command.user_id = user_id;
     command.pax = pax;
@@ -122,6 +153,7 @@ async function closeCommand(command_id) {
     await command.save();
     const commandToSave = await getByIdFull(command_id, true);
     await historyModel.create(commandToSave);
+    await command.destroy();
     return command;
 }
 
@@ -133,7 +165,8 @@ async function addProduct(command_id, product_id, quantity) {
         totalQuantity += product.Command_details.quantity;
     };
     await command.addProduct(product_id, { through: { quantity: totalQuantity } });
-    return command;
+    const cleanCommand = helper.cleanData(command);
+    return cleanCommand;
 };
 
 async function removeProduct(command_id, product_id) {
@@ -145,7 +178,8 @@ async function removeProduct(command_id, product_id) {
 async function updateProduct(command_id, product_id, quantity) {
     const command = await getByIdFull(command_id);
     await command.addProduct(product_id, { through: { quantity: quantity } });
-    return command;
+    const cleanCommand = helper.cleanData(command);
+    return cleanCommand;
 };
 
 
@@ -153,6 +187,7 @@ export const functions = {
     getAll,
     getFullAll,
     getHistory,
+    getHistoryById,
     getById,
     getByIdFull,
     create,

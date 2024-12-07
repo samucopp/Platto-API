@@ -1,4 +1,5 @@
 import productCategoryModel from "../../models/productCategoryModel.js";
+import ProductModel from "../../models/productModel.js";
 import error from "../../helpers/errors.js";
 
 async function getAll() {
@@ -46,6 +47,14 @@ async function update(id, name) {
 
 async function remove(id) {
     const productCategoryToRemove = await getById(id);
+    const productsInCategory = await ProductModel.findAll({
+        where: {
+            category_id: id
+        }
+    });
+    if (productsInCategory.length > 0) {
+        throw new error.PRODUCT_CATEGORY_IN_USE();
+    }
     await productCategoryToRemove.destroy();
     return productCategoryToRemove;
 };
