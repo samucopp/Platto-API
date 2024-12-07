@@ -1,0 +1,3611 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Platto API",
+        "description": "Platto es un sistema integral para la gestión de restaurantes diseñado para facilitar la administración de productos, comandas y mesas. Esta API permite a los desarrolladores interactuar con las funcionalidades clave del sistema, como:\n- **Gestión de productos**: Creación, edición y eliminación de los productos del menú.\n- **Gestión de comandas**: Registro y seguimiento de pedidos realizados por los clientes.\n- **Gestión de mesas**: Control y asignación de mesas para optimizar la experiencia de los clientes.\n\n### Características principales\n- Diseñada para ser escalable y eficiente.\n- Fácil integración con aplicaciones frontend y sistemas POS.\n- Documentación clara y detallada para un uso rápido y sin complicaciones.\n\n### Público objetivo\nPlatto es ideal para desarrolladores que están construyendo aplicaciones orientadas al sector gastronómico, como sistemas de reserva, herramientas de administración de restaurantes, o aplicaciones móviles para ordenar en mesas.",
+        "version": "1.0.0"
+    },
+    "contact": {
+        "name": "with Platto",
+        "email": "soporte@platto.com"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3001/api",
+            "description": "Local development server"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Login",
+            "description": "Obtener acceso a la api"
+        },
+        {
+            "name": "Table",
+            "description": "Mesas del restaurante"
+        },
+        {
+            "name": "Product-category",
+            "description": "Categorias de los productos del restaurante"
+        },
+        {
+            "name": "Product",
+            "description": "Productos del restaurante"
+        },
+        {
+            "name": "User",
+            "description": "Trabajadores del restaurante"
+        },
+        {
+            "name": "Command",
+            "description": "Todo sobre las comandas del restaurante"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Login de usuario",
+                "description": "Autenticación de usuario con nombre de usuario y contraseña.",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login/Request"
+                            },
+                            "example": {
+                                "user_name": "admin",
+                                "password": "9asdfgb3or2D"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login exitoso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Login/Response"
+                                },
+                                "example": {
+                                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MjI0MjQ3NjV9.6fjV3j4K9nVb2Zl2Zl2Zl2Zl2Zl2Zl2"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciales incorrectas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Errors/INVALID_CREDENTIALS"
+                                },
+                                "example": {
+                                    "message": "Credenciales incorrectas"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Errors/USER_NOT_FOUND"
+                                },
+                                "example": {
+                                    "message": "Usuario no encontrado"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "message": "Error interno del servidor"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product": {
+            "post": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Crear un nuevo producto",
+                "description": "Crea un nuevo producto",
+                "operationId": "createProduct",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Información del producto",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "ref": "#/components/schemas/CreateProductRequest"
+                            },
+                            "example": {
+                                "name": "Hamburguesa",
+                                "price": 1000,
+                                "category_id": 1,
+                                "description": "Hamburguesa con queso y tomate",
+                                "allergens": "Glúten"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Producto creado con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Product/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "name": "Hamburguesa",
+                                    "price": 1000,
+                                    "category_id": 1,
+                                    "description": "Hamburguesa con queso y tomate",
+                                    "allergens": "Glúten",
+                                    "category": {
+                                        "id": 1,
+                                        "name": "Hamburguesas"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Ya existe un producto con ese nombre",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/PRODUCT_ALREADY_EXISTS"
+                                },
+                                "example": {
+                                    "error": "Ya existe un producto con ese nombre",
+                                    "status": 409
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Categoria no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/PRODUCT_CATEGORY_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Categoria no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Obtener todos los productos",
+                "description": "Obtiene una lista de todos los productos",
+                "operationId": "getProducts",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de productos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "ref": "#/components/schemas/Product/Response"
+                                    }
+                                },
+                                "example": [
+                                    {
+                                        "id": 1,
+                                        "name": "Hamburguesa",
+                                        "price": 1000,
+                                        "category_id": 1,
+                                        "description": "Hamburguesa con queso y tomate",
+                                        "allergens": "Glúten",
+                                        "category": {
+                                            "id": 1,
+                                            "name": "Hamburguesas"
+                                        }
+                                    },
+                                    {
+                                        "id": 2,
+                                        "name": "Pizza",
+                                        "price": 2000,
+                                        "category_id": 2,
+                                        "description": "Pizza con queso y tomate",
+                                        "allergens": "Glúten",
+                                        "category": {
+                                            "id": 2,
+                                            "name": "Pizzas"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product/{id}": {
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Obtener un producto por ID",
+                "description": "Obtiene un producto por ID",
+                "operationId": "getProductById",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Producto encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Product/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "name": "Hamburguesa",
+                                    "price": 1000,
+                                    "category_id": 1,
+                                    "description": "Hamburguesa con queso y tomate",
+                                    "allergens": "Glúten",
+                                    "category": {
+                                        "id": 1,
+                                        "name": "Hamburguesas"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Producto no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/PRODUCT_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Producto no encontrado",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Actualizar un producto existente",
+                "description": "Actualiza un producto existente",
+                "operationId": "updateProduct",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "ref": "#/components/schemas/UpdateProductRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Producto actualizado con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Product/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "name": "Hamburguesa",
+                                    "price": 1000,
+                                    "category_id": 1,
+                                    "description": "Hamburguesa con queso y tomate",
+                                    "allergens": "Glúten",
+                                    "category": {
+                                        "id": 1,
+                                        "name": "Hamburguesas"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Producto no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "ref": "#/components/schemas/Errors/PRODUCT_NOT_FOUND"
+                                        },
+                                        {
+                                            "ref": "#/components/schemas/Errors/PRODUCT_CATEGORY_NOT_FOUND"
+                                        }
+                                    ]
+                                },
+                                "examples": {
+                                    "PRODUCT_NOT_FOUND": {
+                                        "summary": "Producto no encontrado",
+                                        "value": {
+                                            "error": "Producto no encontrado",
+                                            "status": 404
+                                        }
+                                    },
+                                    "PRODUCT_CATEGORY_NOT_FOUND": {
+                                        "summary": "Categoría de producto no encontrada",
+                                        "value": {
+                                            "error": "Categoría de producto no encontrada",
+                                            "status": 404
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Eliminar un producto por ID",
+                "description": "Elimina un producto por ID",
+                "operationId": "deleteProduct",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Producto eliminado con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Product/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "name": "Hamburguesa",
+                                    "price": 1000,
+                                    "category_id": 1,
+                                    "description": "Hamburguesa con queso y tomate",
+                                    "allergens": "Glúten",
+                                    "category": {
+                                        "id": 1,
+                                        "name": "Hamburguesas"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Producto no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/PRODUCT_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Producto no encontrado",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/table": {
+            "post": {
+                "tags": [
+                    "Table"
+                ],
+                "summary": "Crear una nueva mesa",
+                "description": "Crea una nueva mesa con la capacidad especificada",
+                "operationId": "createTable",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Información de la nueva mesa",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "ref": "#/components/schemas/TableRequest"
+                            },
+                            "example": {
+                                "capacity": 10
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Mesa creada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Table/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "capacity": 10,
+                                    "status": "disponible"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error en los datos proporcionados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/INVALID_DATA"
+                                },
+                                "example": {
+                                    "error": "Error en los datos proporcionados",
+                                    "status": 400
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Table"
+                ],
+                "summary": "Obtener todas las mesas",
+                "description": "Obtiene una lista de todas las mesas",
+                "operationId": "getTables",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de mesas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "ref": "#/components/schemas/Table/Response"
+                                    }
+                                },
+                                "example": [
+                                    {
+                                        "id": 1,
+                                        "capacity": 10,
+                                        "status": "disponible"
+                                    },
+                                    {
+                                        "id": 2,
+                                        "capacity": 8,
+                                        "status": "disponible"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/table/{id}": {
+            "get": {
+                "tags": [
+                    "Table"
+                ],
+                "summary": "Obtener una mesa por ID",
+                "description": "Obtiene una mesa específica por su ID",
+                "operationId": "getTableById",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID de la mesa",
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Mesa encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Table/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "capacity": 10,
+                                    "status": "disponible"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Mesa no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/TABLE_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Mesa no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Table"
+                ],
+                "summary": "Actualizar una mesa",
+                "description": "Actualiza una mesa existente por ID",
+                "operationId": "updateTable",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID de la mesa",
+                        "schema": {
+                            "type": "integer",
+                            "example": 5
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos para actualizar la mesa",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "ref": "#/components/schemas/Table/Request"
+                            },
+                            "example": {
+                                "capacity": 8
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Mesa actualizada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Table/Response"
+                                },
+                                "example": {
+                                    "id": 5,
+                                    "capacity": 8,
+                                    "status": "disponible"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Mesa no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/TABLE_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Mesa no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error en los datos proporcionados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/INVALID_DATA"
+                                },
+                                "example": {
+                                    "error": "Error en los datos proporcionados",
+                                    "status": 400
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Table"
+                ],
+                "summary": "Eliminar una mesa",
+                "description": "Elimina una mesa existente por ID",
+                "operationId": "deleteTable",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID de la mesa",
+                        "schema": {
+                            "type": "integer",
+                            "example": 5
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Mesa eliminada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Table/Response"
+                                },
+                                "example": {
+                                    "id": 5,
+                                    "capacity": 8
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Mesa no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/NotFound"
+                                },
+                                "example": {
+                                    "error": "Mesa no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "La mesa no se puede eliminar porque está ocupada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/TABLE_IN_USE"
+                                },
+                                "example": {
+                                    "error": "La mesa no se puede eliminar porque está ocupada",
+                                    "status": 400
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/ServerError"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product-category": {
+            "post": {
+                "tags": [
+                    "Product-category"
+                ],
+                "summary": "Crear una nueva categoría",
+                "description": "Crea una nueva categoría de productos.",
+                "operationId": "createProductCategory",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Información de la nueva categoría",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "ref": "#/components/schemas/ProductCategoery/CreateRequest"
+                            },
+                            "example": {
+                                "name": "Segundos"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Categoría creada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/ProductCategory/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "name": "Segundos"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "La categoría ya existe",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/PRODUCT_CATEGORY_ALREADY_EXISTS"
+                                },
+                                "example": {
+                                    "error": "La categoría ya existe",
+                                    "status": 409
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Product-category"
+                ],
+                "summary": "Obtener todas las categorías",
+                "description": "Obtiene una lista de todas las categorías de productos.",
+                "operationId": "getAllProductCategories",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de categorías",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "ref": "#/components/schemas/ProductCategory/Response"
+                                    }
+                                },
+                                "example": [
+                                    {
+                                        "id": 1,
+                                        "name": "Segundos"
+                                    },
+                                    {
+                                        "id": 2,
+                                        "name": "Entradas"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product-category/{id}": {
+            "get": {
+                "tags": [
+                    "Product-category"
+                ],
+                "summary": "Obtener una categoría por ID",
+                "description": "Obtiene una categoría de producto por su ID.",
+                "operationId": "getProductCategoryById",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categoría encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/ProductCategory/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "name": "Segundos"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Categoría no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/PRODUCT_CATEGORY_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Categoría no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Product-category"
+                ],
+                "summary": "Actualizar una categoría",
+                "description": "Actualiza una categoría de producto por su ID.",
+                "operationId": "updateProductCategory",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Nueva información de la categoría",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "ref": "#/components/schemas/ProductCategory/UpdateRequest"
+                            },
+                            "example": {
+                                "name": "Principal"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Categoría actualizada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/ProductCategory/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "name": "Principal"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Categoría no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/PRODUCT_CATEGORY_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Categoría no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "La categoría ya existe",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/PRODUCT_CATEGORY_ALREADY_EXISTS"
+                                },
+                                "example": {
+                                    "error": "La categoría ya existe",
+                                    "status": 409
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Product-category"
+                ],
+                "summary": "Eliminar una categoría",
+                "description": "Elimina una categoría de producto por su ID.",
+                "operationId": "deleteProductCategory",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categoría eliminada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/ProductCategory/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "name": "Segundos"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Categoría no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/PRODUCT_CATEGORY_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Categoría no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "La categoría contiene productos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/PRODUCT_CATEGORY_IN_USE"
+                                },
+                                "example": {
+                                    "error": "No se puede eliminar la categoría porque hay productos asociados a ella",
+                                    "status": 409
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Crear un nuevo usuario",
+                "description": "Crea un nuevo usuario",
+                "operationId": "createUser",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Información del usuario",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "ref": "#/components/schemas/User/CreateRequest"
+                            },
+                            "example": {
+                                "user_name": "prueba",
+                                "password": "12345",
+                                "role": "admin"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario creado con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/User/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "user_name": "prueba",
+                                    "password": "$2a$10$wikYqklu1hy0sFFJ1Hu81eidrFoAiP5wNvvQUgD0t5plLmI86o6/W",
+                                    "role": "admin"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Datos de usuario incorrectos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/INVALID_DATA"
+                                },
+                                "example": {
+                                    "error": "Error en los datos proporcionados",
+                                    "status": 400
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "El nombre de usuario ya existe",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/USER_ALREADY_EXISTS"
+                                },
+                                "example": {
+                                    "error": "El nombre de usuario ya existe",
+                                    "status": 409
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Obtener todos los usuarios",
+                "description": "Obtiene una lista de todos los usuarios",
+                "operationId": "getUsers",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuarios",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "ref": "#/components/schemas/User/Response"
+                                    }
+                                },
+                                "example": [
+                                    {
+                                        "id": 1,
+                                        "user_name": "prueba",
+                                        "password": "$2a$10$wikYqklu1hy0sFFJ1Hu81eidrFoAiP5wNvvQUgD0t5plLmI86o6/W",
+                                        "role": "admin"
+                                    },
+                                    {
+                                        "id": 2,
+                                        "user_name": "ejemplo",
+                                        "password": "$2a$10$wikYqklu1hy0sFFJ1Hu81eidrFoAiP5wNvvQUgD0t5plLmI86o6/W",
+                                        "role": "camarero"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Obtener un usuario por ID",
+                "description": "Obtiene un usuario por ID",
+                "operationId": "getUserById",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/User/Response"
+                                },
+                                "example": {
+                                    "id": 4,
+                                    "user_name": "prueba",
+                                    "password": "$2a$10$wikYqklu1hy0sFFJ1Hu81eidrFoAiP5wNvvQUgD0t5plLmI86o6/W",
+                                    "role": "admin"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/USER_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Usuario no encontrado",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Actualizar un usuario existente",
+                "description": "Actualiza un usuario existente",
+                "operationId": "updateUser",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos actualizados del usuario",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "ref": "#/components/schemas/User/UpdateRequest"
+                            },
+                            "example": {
+                                "user_name": "prueba1",
+                                "password": "contraseñasegura",
+                                "role": "camarero"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario actualizado con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/User/Response"
+                                },
+                                "example": {
+                                    "id": 7,
+                                    "user_name": "prueba1",
+                                    "password": "$2a$10$wikYqklu1hy0sFFJ1Hu81eidrFoAiP5wNvvQUgD0t5plLmI86o6/W",
+                                    "role": "camarero"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/USER_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Usuario no encontrado",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Ya existe un usuario con ese nombre",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/USERNAME_ALREADY_EXISTS"
+                                },
+                                "example": {
+                                    "error": "Ya existe un usuario con ese nombre",
+                                    "status": 409
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error en los datos proporcionados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/INVALID_DATA"
+                                },
+                                "example": {
+                                    "error": "Error en los datos proporcionados",
+                                    "status": 400
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Eliminar un usuario por ID",
+                "description": "Elimina un usuario por ID",
+                "operationId": "deleteUser",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario eliminado con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/User/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "user_name": "prueba",
+                                    "password": "$2a$10$wikYqklu1hy0sFFJ1Hu81eidrFoAiP5wNvvQUgD0t5plLmI86o6/W",
+                                    "role": "admin"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/USER_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Usuario no encontrado",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "El usuario tiene comandas en preparación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/USER_HAS_COMMAND"
+                                },
+                                "example": {
+                                    "error": "No se puede eliminar el usuario porque tiene comandas en preparación",
+                                    "status": 409
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/command": {
+            "get": {
+                "tags": [
+                    "Command"
+                ],
+                "summary": "Obtener todas las comandas abiertas",
+                "description": "Obtiene una lista de todas las comandas abiertas",
+                "operationId": "viewAllOpenCommands",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de comandas abiertas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "ref": "#/components/schemas/Command/Response"
+                                    }
+                                },
+                                "example": [
+                                    {
+                                        "id": 1,
+                                        "date": "2023-08-01T13:00:00.000Z",
+                                        "time": "comida",
+                                        "status": "en preparacion",
+                                        "table_id": 1,
+                                        "user_id": 1,
+                                        "pax": 2,
+                                        "notes": "Alergia al marisco",
+                                        "discount": 10
+                                    },
+                                    {
+                                        "id": 2,
+                                        "date": "2023-08-01T21:00:00.000Z",
+                                        "time": "cena",
+                                        "status": "en preparacion",
+                                        "table_id": 1,
+                                        "user_id": 1,
+                                        "pax": 2,
+                                        "notes": "Alergia a la cebolla",
+                                        "discount": 5
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Command"
+                ],
+                "summary": "Crear una nueva comanda",
+                "description": "Crea una nueva comanda",
+                "operationId": "createNewCommand",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Informacion de la nueva comanda",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "ref": "#/components/schemas/Command/CreateRequest"
+                            },
+                            "example": {
+                                "table_id": 1,
+                                "user_id": 1,
+                                "pax": 2,
+                                "notes": "Alergia al marisco",
+                                "discount": 10
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Comanda creada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Command/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "date": "2023-08-01T13:00:00.000Z",
+                                    "time": "comida",
+                                    "status": "en preparacion",
+                                    "table_id": 1,
+                                    "user_id": 1,
+                                    "pax": 2,
+                                    "notes": "Alergia al marisco",
+                                    "discount": 10
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Mesa no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/TABLE_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Mesa no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "ref": "#/components/schemas/Errors/EXCEEDS_TABLE_CAPACITY"
+                                        },
+                                        {
+                                            "ref": "#/components/schemas/Errors/TABLE_ALREADY_IN_USE"
+                                        }
+                                    ]
+                                },
+                                "examples": {
+                                    "EXCEEDS_TABLE_CAPACITY": {
+                                        "summary": "Capacidad de la mesa excedida",
+                                        "value": {
+                                            "error": "La mesa no puede contener tantos comensales",
+                                            "status": 409
+                                        }
+                                    },
+                                    "TABLE_ALREADY_IN_USE": {
+                                        "summary": "La mesa ya esta en uso",
+                                        "value": {
+                                            "error": "La mesa ya esta ocupada",
+                                            "status": 409
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/command/complete": {
+            "get": {
+                "tags": [
+                    "Command"
+                ],
+                "summary": "Obtener todas las comandas",
+                "description": "Obtiene una lista con todas las comandas abiertas",
+                "operationId": "viewOpenCompleteCommands",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de comandas completas abiertas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "ref": "#/components/schemas/Command/CompleteResponse"
+                                    }
+                                },
+                                "example": [
+                                    {
+                                        "id": 1,
+                                        "date": "2023-08-01T13:00:00.000Z",
+                                        "time": "comida",
+                                        "status": "cerrada",
+                                        "pax": 2,
+                                        "table_id": 1,
+                                        "user_id": 1,
+                                        "user_name": "umpa_lumpa1",
+                                        "notes": "Alergia al marisco",
+                                        "discount": 10,
+                                        "total": 100,
+                                        "Products": [
+                                            {
+                                                "category_id": 1,
+                                                "category_name": "Bebidas",
+                                                "id": 1,
+                                                "name": "Hamburguesa",
+                                                "notes": "Sin lechuga",
+                                                "discount": 0,
+                                                "price": 100,
+                                                "quantity": 2,
+                                                "subtotal": 200
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": 1,
+                                        "date": "2023-08-01T13:00:00.000Z",
+                                        "time": "comida",
+                                        "status": "cerrada",
+                                        "pax": 2,
+                                        "table_id": 1,
+                                        "user_id": 1,
+                                        "user_name": "umpa_lumpa1",
+                                        "notes": "Alergia al marisco",
+                                        "discount": 10,
+                                        "total": 100,
+                                        "Products": [
+                                            {
+                                                "category_id": 1,
+                                                "category_name": "Bebidas",
+                                                "id": 1,
+                                                "name": "Hamburguesa",
+                                                "notes": "Sin lechuga",
+                                                "discount": 0,
+                                                "price": 100,
+                                                "quantity": 2,
+                                                "subtotal": 200
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/command/complete/{id}": {
+            "get": {
+                "tags": [
+                    "Command"
+                ],
+                "summary": "Obtener una comanda por su ID",
+                "description": "Obtiene una comanda al completo por su ID ",
+                "operationId": "viewOneCompleteCommand",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comanda encontrada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Command/CompleteResponse"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "date": "2023-08-01T13:00:00.000Z",
+                                    "time": "comida",
+                                    "status": "en preparacion",
+                                    "pax": 2,
+                                    "table_id": 1,
+                                    "user_id": 1,
+                                    "user_name": "umpa_lumpa1",
+                                    "notes": "Alergia al marisco",
+                                    "discount": 10,
+                                    "total": 100,
+                                    "Products": [
+                                        {
+                                            "category_id": 1,
+                                            "category_name": "Bebidas",
+                                            "id": 1,
+                                            "name": "Hamburguesa",
+                                            "notes": "Sin lechuga",
+                                            "discount": 0,
+                                            "price": 100,
+                                            "quantity": 2,
+                                            "subtotal": 200
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Comanda no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/COMMAND_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Comanda no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/command/history": {
+            "get": {
+                "tags": [
+                    "Command"
+                ],
+                "summary": "Obtener todas las comandas",
+                "description": "Obtiene una lista con el historial de comandas",
+                "operationId": "viewCommandsHistory",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Historial de comandas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "ref": "#/components/schemas/Command/CompleteResponse"
+                                    }
+                                },
+                                "example": [
+                                    {
+                                        "id": 1,
+                                        "date": "2023-08-01T13:00:00.000Z",
+                                        "time": "comida",
+                                        "status": "cerrada",
+                                        "pax": 2,
+                                        "table_id": 1,
+                                        "user_id": 1,
+                                        "user_name": "umpa_lumpa1",
+                                        "notes": "Alergia al marisco",
+                                        "discount": 10,
+                                        "total": 100,
+                                        "Products": [
+                                            {
+                                                "category_id": 1,
+                                                "category_name": "Bebidas",
+                                                "id": 1,
+                                                "name": "Hamburguesa",
+                                                "notes": "Sin lechuga",
+                                                "discount": 0,
+                                                "price": 100,
+                                                "quantity": 2,
+                                                "subtotal": 200
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": 1,
+                                        "date": "2023-08-01T13:00:00.000Z",
+                                        "time": "comida",
+                                        "status": "cerrada",
+                                        "pax": 2,
+                                        "table_id": 1,
+                                        "user_id": 1,
+                                        "user_name": "umpa_lumpa1",
+                                        "notes": "Alergia al marisco",
+                                        "discount": 10,
+                                        "total": 100,
+                                        "Products": [
+                                            {
+                                                "category_id": 1,
+                                                "category_name": "Bebidas",
+                                                "id": 1,
+                                                "name": "Hamburguesa",
+                                                "notes": "Sin lechuga",
+                                                "discount": 0,
+                                                "price": 100,
+                                                "quantity": 2,
+                                                "subtotal": 200
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/command/history/{id}": {
+            "get": {
+                "tags": [
+                    "Command"
+                ],
+                "summary": "Obtener una comanda por su ID",
+                "description": "Obtiene una comanda del historial de comandas por su ID ",
+                "operationId": "viewOneCommandHistory",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comanda encontrada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Command/CompleteResponse"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "date": "2023-08-01T13:00:00.000Z",
+                                    "time": "comida",
+                                    "status": "en preparacion",
+                                    "pax": 2,
+                                    "table_id": 1,
+                                    "user_id": 1,
+                                    "user_name": "umpa_lumpa1",
+                                    "notes": "Alergia al marisco",
+                                    "discount": 10,
+                                    "total": 100,
+                                    "Products": [
+                                        {
+                                            "category_id": 1,
+                                            "category_name": "Bebidas",
+                                            "id": 1,
+                                            "name": "Hamburguesa",
+                                            "notes": "Sin lechuga",
+                                            "discount": 0,
+                                            "price": 100,
+                                            "quantity": 2,
+                                            "subtotal": 200
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Comanda no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/COMMAND_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Comanda no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/command/{id}": {
+            "get": {
+                "tags": [
+                    "Command"
+                ],
+                "summary": "Obtener una comanda por su ID",
+                "description": "Obtiene una comanda por su ID",
+                "operationId": "viewOneOpenCommand",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comanda encontrada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Command/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "date": "2023-08-01T13:00:00.000Z",
+                                    "time": "comida",
+                                    "status": "en preparacion",
+                                    "table_id": 1,
+                                    "user_id": 1,
+                                    "pax": 2,
+                                    "notes": "Alergia al marisco",
+                                    "discount": 10
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Comanda no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/COMMAND_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Comanda no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Command"
+                ],
+                "summary": "Actualizar una comanda existente",
+                "description": "Actualiza una comanda existente",
+                "operationId": "updateCommand",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "ref": "#/components/schemas/Command/UpdateRequest"
+                            },
+                            "example": {
+                                "date": "2023-08-01T13:00:00.000Z",
+                                "table_id": 1,
+                                "user_id": 1,
+                                "pax": 2,
+                                "notes": "Alergia al marisco",
+                                "discount": 10
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Comanda actualizada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Command/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "date": "2023-08-01T13:00:00.000Z",
+                                    "time": "comida",
+                                    "status": "en preparacion",
+                                    "table_id": 1,
+                                    "user_id": 1,
+                                    "pax": 2,
+                                    "notes": "Alergia al marisco",
+                                    "discount": 10
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Conflictos en la busqueda",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "ref": "#/components/schemas/Errors/TABLE_NOT_FOUND"
+                                        },
+                                        {
+                                            "ref": "#/components/schemas/Errors/COMMAND_NOT_FOUND"
+                                        }
+                                    ]
+                                },
+                                "examples": {
+                                    "TABLE_NOT_FOUND": {
+                                        "summary": "Mesa no encontrada",
+                                        "value": {
+                                            "error": "Mesa no encontrada",
+                                            "status": 409
+                                        }
+                                    },
+                                    "COMMAND_NOT_FOUND": {
+                                        "summary": "Comanda no encontrada",
+                                        "value": {
+                                            "error": "Comanda no encontrada",
+                                            "status": 409
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflictos en la solicitud",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "ref": "#/components/schemas/Errors/EXCEEDS_TABLE_CAPACITY"
+                                        },
+                                        {
+                                            "ref": "#/components/schemas/Errors/TABLE_ALREADY_IN_USE"
+                                        }
+                                    ]
+                                },
+                                "examples": {
+                                    "EXCEEDS_TABLE_CAPACITY": {
+                                        "summary": "Capacidad de la mesa excedida",
+                                        "value": {
+                                            "error": "La mesa no puede contener tantos comensales",
+                                            "status": 409
+                                        }
+                                    },
+                                    "TABLE_ALREADY_IN_USE": {
+                                        "summary": "La mesa ya esta en uso",
+                                        "value": {
+                                            "error": "La mesa ya esta ocupada",
+                                            "status": 409
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Command"
+                ],
+                "summary": "Eliminar una comanda por ID",
+                "description": "Elimina una comanda por ID",
+                "operationId": "removeCommand",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comanda eliminada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Command/Response"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "date": "2023-08-01T13:00:00.000Z",
+                                    "time": "comida",
+                                    "status": "en preparacion",
+                                    "table_id": 1,
+                                    "user_id": 1,
+                                    "pax": 2,
+                                    "notes": "Alergia al marisco",
+                                    "discount": 10
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Comanda no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/COMMAND_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Comanda no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/command/{id}/add-product": {
+            "post": {
+                "tags": [
+                    "Command"
+                ],
+                "summary": "Añadir un producto a una comanda",
+                "description": "Añade un producto a una comanda abierta",
+                "operationId": "addProductToCommand",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Información del producto a agregar",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "ref": "#/components/schemas/Command/AddProductRequest"
+                            },
+                            "example": {
+                                "product_id": 1,
+                                "quantity": 2
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Producto añadido con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Command/CompleteResponse"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "date": "2023-08-01T13:00:00.000Z",
+                                    "time": "comida",
+                                    "status": "en preparacion",
+                                    "pax": 2,
+                                    "table_id": 1,
+                                    "user_id": 1,
+                                    "user_name": "umpa_lumpa1",
+                                    "notes": "Alergia al marisco",
+                                    "discount": 10,
+                                    "total": 100,
+                                    "Products": [
+                                        {
+                                            "category_id": 1,
+                                            "category_name": "Bebidas",
+                                            "id": 1,
+                                            "name": "Hamburguesa",
+                                            "notes": "Sin lechuga",
+                                            "discount": 0,
+                                            "price": 100,
+                                            "quantity": 2,
+                                            "subtotal": 200
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Comanda no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/COMMAND_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Comanda no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/command/{id}/update-product": {
+            "put": {
+                "tags": [
+                    "Command"
+                ],
+                "summary": "Actualizar un producto de una comanda abierta",
+                "description": "Actualiza un producto de una comanda abierta",
+                "operationId": "updateProductInCommand",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "ref": "#/components/schemas/Command/UpdateProductRequest"
+                            },
+                            "example": {
+                                "product_id": 1,
+                                "quantity": 2
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Producto actualizado con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Command/CompleteResponse"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "date": "2023-08-01T13:00:00.000Z",
+                                    "time": "comida",
+                                    "status": "en preparacion",
+                                    "pax": 2,
+                                    "table_id": 1,
+                                    "user_id": 1,
+                                    "user_name": "umpa_lumpa1",
+                                    "notes": "Alergia al marisco",
+                                    "discount": 10,
+                                    "total": 100,
+                                    "Products": [
+                                        {
+                                            "category_id": 1,
+                                            "category_name": "Bebidas",
+                                            "id": 1,
+                                            "name": "Hamburguesa",
+                                            "notes": "Sin lechuga",
+                                            "discount": 0,
+                                            "price": 100,
+                                            "quantity": 2,
+                                            "subtotal": 200
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Comanda no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/COMMAND_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Comanda no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/command/{id}/remove-product": {
+            "delete": {
+                "tags": [
+                    "Command"
+                ],
+                "summary": "Eliminar un producto de una comanda abierta",
+                "description": "Elimina un producto de una comanda abierta",
+                "operationId": "removeProductFromCommand",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "ref": "#/components/schemas/Command/RemoveProductRequest"
+                            },
+                            "example": {
+                                "product_id": 1
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Producto eliminado con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Command/CompleteResponse"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "date": "2023-08-01T13:00:00.000Z",
+                                    "time": "comida",
+                                    "status": "en preparacion",
+                                    "pax": 2,
+                                    "table_id": 1,
+                                    "user_id": 1,
+                                    "user_name": "umpa_lumpa1",
+                                    "notes": "Alergia al marisco",
+                                    "discount": 10,
+                                    "total": 100,
+                                    "Products": [
+                                        {
+                                            "category_id": 1,
+                                            "category_name": "Bebidas",
+                                            "id": 1,
+                                            "name": "Hamburguesa",
+                                            "notes": "Sin lechuga",
+                                            "discount": 0,
+                                            "price": 100,
+                                            "quantity": 2,
+                                            "subtotal": 200
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Comanda no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/COMMAND_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Comanda no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/command/{id}/close": {
+            "put": {
+                "tags": [
+                    "Command"
+                ],
+                "summary": "Cerrar una comanda",
+                "description": "Cierra una comanda abierta",
+                "operationId": "closeCommand",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comanda cerrada con exito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Command/CompleteResponse"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "date": "2023-08-01T13:00:00.000Z",
+                                    "time": "comida",
+                                    "status": "cerrada",
+                                    "pax": 2,
+                                    "table_id": 1,
+                                    "user_id": 1,
+                                    "user_name": "umpa_lumpa1",
+                                    "notes": "Alergia al marisco",
+                                    "discount": 10,
+                                    "total": 100,
+                                    "Products": [
+                                        {
+                                            "category_id": 1,
+                                            "category_name": "Bebidas",
+                                            "id": 1,
+                                            "name": "Hamburguesa",
+                                            "notes": "Sin lechuga",
+                                            "discount": 0,
+                                            "price": 100,
+                                            "quantity": 2,
+                                            "subtotal": 200
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Comanda no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/COMMAND_NOT_FOUND"
+                                },
+                                "example": {
+                                    "error": "Comanda no encontrada",
+                                    "status": 404
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                },
+                                "example": {
+                                    "error": "Error interno del servidor",
+                                    "status": 500
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "schemas": {
+            "Login": {
+                "type": "object",
+                "properties": {
+                    "Request": {
+                        "type": "object",
+                        "properties": {
+                            "user_name": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "user_name",
+                            "password"
+                        ]
+                    },
+                    "Response": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "token": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "message",
+                            "token"
+                        ]
+                    }
+                }
+            },
+            "Product": {
+                "type": "object",
+                "properties": {
+                    "CreateRequest": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "price": {
+                                "type": "number"
+                            },
+                            "category_id": {
+                                "type": "integer"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "allergens": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "price",
+                            "category_id",
+                            "description"
+                        ]
+                    },
+                    "UpdateRequest": {
+                        "ref": "#/components/schemas/CreateProductRequest"
+                    },
+                    "Response": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "price": {
+                                "type": "number"
+                            },
+                            "category_id": {
+                                "type": "integer"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "allergens": {
+                                "type": "string"
+                            },
+                            "category": {
+                                "ref": "#/components/schemas/ProductCategory/Response"
+                            }
+                        }
+                    }
+                }
+            },
+            "Table": {
+                "type": "object",
+                "properties": {
+                    "Request": {
+                        "type": "object",
+                        "properties": {
+                            "capacity": {
+                                "type": "integer",
+                                "description": "Capacidad de la mesa"
+                            }
+                        },
+                        "required": [
+                            "capacity"
+                        ]
+                    },
+                    "Response": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "description": "ID de la mesa"
+                            },
+                            "capacity": {
+                                "type": "integer",
+                                "description": "Capacidad de la mesa"
+                            },
+                            "status": {
+                                "type": "string",
+                                "description": "Estado de la mesa"
+                            }
+                        }
+                    }
+                }
+            },
+            "ProductCategory": {
+                "type": "object",
+                "properties": {
+                    "CreateRequest": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "name"
+                        ]
+                    },
+                    "UpdateRequest": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "name"
+                        ]
+                    },
+                    "Response": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "CreateRequest": {
+                        "type": "object",
+                        "properties": {
+                            "user_name": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            },
+                            "role": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "user_name",
+                            "password",
+                            "role"
+                        ]
+                    },
+                    "UpdateRequest": {
+                        "type": "object",
+                        "properties": {
+                            "user_name": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            },
+                            "role": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "Response": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "user_name": {
+                                "type": "string"
+                            },
+                            "role": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "Command": {
+                "type": "object",
+                "properties": {
+                    "CreateRequest": {
+                        "type": "object",
+                        "properties": {
+                            "table_id": {
+                                "type": "integer"
+                            },
+                            "user_id": {
+                                "type": "integer"
+                            },
+                            "pax": {
+                                "type": "integer"
+                            },
+                            "notes": {
+                                "type": "string",
+                                "nullable": true
+                            },
+                            "discount": {
+                                "type": "number",
+                                "nullable": true
+                            }
+                        },
+                        "required": [
+                            "table_id",
+                            "user_id",
+                            "pax"
+                        ]
+                    },
+                    "UpdateRequest": {
+                        "type": "object",
+                        "properties": {
+                            "date": {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            "table_id": {
+                                "type": "integer"
+                            },
+                            "user_id": {
+                                "type": "integer"
+                            },
+                            "pax": {
+                                "type": "integer"
+                            },
+                            "notes": {
+                                "type": "string",
+                                "nullable": true
+                            },
+                            "discount": {
+                                "type": "number",
+                                "nullable": true
+                            }
+                        },
+                        "required": [
+                            "date",
+                            "table_id",
+                            "user_id",
+                            "pax"
+                        ]
+                    },
+                    "AddProductRequest": {
+                        "type": "object",
+                        "properties": {
+                            "product_id": {
+                                "type": "integer"
+                            },
+                            "quantity": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "product_id",
+                            "quantity"
+                        ]
+                    },
+                    "UpdateProductRequest": {
+                        "type": "object",
+                        "properties": {
+                            "product_id": {
+                                "type": "integer"
+                            },
+                            "quantity": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "product_id",
+                            "quantity"
+                        ]
+                    },
+                    "RemoveProductRequest": {
+                        "type": "object",
+                        "properties": {
+                            "product_id": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "product_id"
+                        ]
+                    },
+                    "Response": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "date": {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            "time": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "string"
+                            },
+                            "table_id": {
+                                "type": "integer"
+                            },
+                            "user_id": {
+                                "type": "integer"
+                            },
+                            "pax": {
+                                "type": "integer"
+                            },
+                            "notes": {
+                                "type": "string",
+                                "nullable": true
+                            },
+                            "discount": {
+                                "type": "number",
+                                "nullable": true
+                            }
+                        }
+                    },
+                    "CompleteResponse": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "date": {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            "time": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "string"
+                            },
+                            "pax": {
+                                "type": "integer"
+                            },
+                            "table_id": {
+                                "type": "integer"
+                            },
+                            "user_id": {
+                                "type": "integer"
+                            },
+                            "user_name": {
+                                "type": "string"
+                            },
+                            "notes": {
+                                "type": "string",
+                                "nullable": true
+                            },
+                            "discount": {
+                                "type": "number",
+                                "nullable": true
+                            },
+                            "total": {
+                                "type": "number"
+                            },
+                            "products": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "category_id": {
+                                            "type": "integer"
+                                        },
+                                        "category_name": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "notes": {
+                                            "type": "string"
+                                        },
+                                        "discount": {
+                                            "type": "number"
+                                        },
+                                        "price": {
+                                            "type": "number"
+                                        },
+                                        "quantity": {
+                                            "type": "integer"
+                                        },
+                                        "subtotal": {
+                                            "type": "number"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Errors": {
+                "type": "object",
+                "properties": {
+                    "USER_NOT_FOUND": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "PRODUCT_NOT_FOUND": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "COMMAND_NOT_FOUND": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "PRODUCT_CATEGORY_NOT_FOUND": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "TABLE_NOT_FOUND": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "USER_ALREADY_EXISTS": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "USERNAME_ALREADY_EXISTS": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "USER_HAS_COMMAND": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "PRODUCT_ALREADY_EXISTS": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "PRODUCT_CATEGORY_ALREADY_EXISTS": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "TABLE_ALREADY_IN_USE": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "PRODUCT_CATEGORY_IN_USE": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "TABLE_IN_USE": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "EXCEEDS_TABLE_CAPACITY": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "INVALID_CREDENTIALS": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "INVALID_DATA": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "SERVER_ERROR": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
