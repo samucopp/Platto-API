@@ -7,6 +7,7 @@ const router = Router();
 router.get("/", middleware.isAuthenticated, commandApiController.getAll);
 router.get("/complete", middleware.isAuthenticated, commandApiController.getFullAll);
 router.get("/history", middleware.isAuthenticated, commandApiController.getHistory);
+router.get("/history/:id", middleware.isAdmin, commandApiController.getHistoryById);
 router.get("/:id", middleware.isAuthenticated, commandApiController.getOne);
 router.get("/:id/details", middleware.isAuthenticated, commandApiController.getFullOne);
 
