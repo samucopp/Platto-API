@@ -113,55 +113,55 @@ El sistema está orientado a mejorar la eficiencia operativa, permitiendo que el
 
 ### Comandas
 
-- **GET /command/**: Obtiene todas las comandas. *(Requiere autenticación)*
-- **GET /command/complete**: Obtiene todas las comandas completas. *(Requiere autenticación)*
-- **GET /command/history**: Obtiene el historial de comandas cerradas. *(Requiere autenticación)*
-- **GET /command/history/:id**: Obtiene el historial de una comanda cerrada específica. *(Requiere rol Admin)*
-- **GET /command/:id**: Obtiene una comanda específica. *(Requiere autenticación)*
-- **GET /command/:id/details**: Obtiene los detalles de una comanda específica. *(Requiere autenticación)*
-- **POST /command/**: Crea una nueva comanda. *(Requiere rol Admin o Camarero)*
-- **POST /command/:id/add-product**: Añade un producto a una comanda existente. *(Requiere rol Admin o Camarero)*
-- **PUT /command/:id**: Actualiza los datos de una comanda. *(Requiere rol Admin o Camarero)*
-- **PUT /command/:id/update-product**: Actualiza un producto en una comanda. *(Requiere rol Admin o Camarero)*
-- **PUT /command/:id/close**: Cierra una comanda (marcando que el cliente ha pagado). *(Requiere rol Admin o Camarero)*
-- **DELETE /command/:id**: Elimina una comanda. *(Requiere rol Admin o Camarero)*
-- **DELETE /command/:id/remove-product**: Elimina un producto de una comanda. *(Requiere rol Admin o Camarero)*
+- `GET /command/`: Obtiene todas las comandas. *(Requiere autenticación)*
+- `GET /command/complete`: Obtiene todas las comandas completas. *(Requiere autenticación)*
+- `GET /command/history`: Obtiene el historial de comandas cerradas. *(Requiere autenticación)*
+- `GET /command/history/:id`: Obtiene el historial de una comanda cerrada específica. *(Requiere rol Admin)*
+- `GET /command/:id`: Obtiene una comanda específica. *(Requiere autenticación)*
+- `GET /command/:id/details`: Obtiene los detalles de una comanda específica. *(Requiere autenticación)*
+- `POST /command/`: Crea una nueva comanda. *(Requiere rol Admin o Camarero)*
+- `POST /command/:id/add-product`: Añade un producto a una comanda existente. *(Requiere rol Admin o Camarero)*
+- `PUT /command/:id`: Actualiza los datos de una comanda. *(Requiere rol Admin o Camarero)*
+- `PUT /command/:id/update-product`: Actualiza un producto en una comanda. *(Requiere rol Admin o Camarero)*
+- `PUT /command/:id/close`: Cierra una comanda (marcando que el cliente ha pagado). *(Requiere rol Admin o Camarero)*
+- `DELETE /command/:id`: Elimina una comanda. *(Requiere rol Admin o Camarero)*
+- `DELETE /command/:id/remove-product`: Elimina un producto de una comanda. *(Requiere rol Admin o Camarero)*
 
 ### Categorías de Productos
 
-- **GET /product-category/**: Obtiene todas las categorías de productos. *(Requiere autenticación)*
-- **GET /product-category/:id**: Obtiene una categoría de producto específica. *(Requiere autenticación)*
-- **POST /product-category/**: Crea una nueva categoría de productos. *(Requiere rol Admin o Cocinero)*
-- **PUT /product-category/:id**: Actualiza una categoría de producto. *(Requiere rol Admin o Cocinero)*
-- **DELETE /product-category/:id**: Elimina una categoría de producto. *(Requiere rol Admin o Cocinero)*
+- `GET /product-category/`: Obtiene todas las categorías de productos. *(Requiere autenticación)*
+- `GET /product-category/:id`: Obtiene una categoría de producto específica. *(Requiere autenticación)*
+- `POST /product-category/`: Crea una nueva categoría de productos. *(Requiere rol Admin o Cocinero)*
+- `PUT /product-category/:id`: Actualiza una categoría de producto. *(Requiere rol Admin o Cocinero)*
+- `DELETE /product-category/:id`: Elimina una categoría de producto. *(Requiere rol Admin o Cocinero)*
 
 ### Productos
 
-- **GET /product/**: Obtiene todos los productos. *(Requiere autenticación)*
-- **GET /product/:id**: Obtiene un producto específico. *(Requiere autenticación)*
-- **POST /product/**: Crea un nuevo producto. *(Requiere rol Admin o Cocinero)*
-- **PUT /product/:id**: Actualiza un producto. *(Requiere rol Admin o Cocinero)*
-- **DELETE /product/:id**: Elimina un producto. *(Requiere rol Admin o Cocinero)*
+- `GET /product/`: Obtiene todos los productos. *(Requiere autenticación)*
+- `GET /product/:id`: Obtiene un producto específico. *(Requiere autenticación)*
+- `POST /product/`: Crea un nuevo producto. *(Requiere rol Admin o Cocinero)*
+- `PUT /product/:id`: Actualiza un producto. *(Requiere rol Admin o Cocinero)*
+- `DELETE /product/:id`: Elimina un producto. *(Requiere rol Admin o Cocinero)*
 
 ### Mesas
 
-- **GET /table/**: Obtiene todas las mesas. *(Requiere autenticación)*
-- **GET /table/:id**: Obtiene una mesa específica. *(Requiere autenticación)*
-- **POST /table/**: Crea una nueva mesa. *(Requiere rol Admin o Camarero)*
-- **PUT /table/:id**: Actualiza una mesa. *(Requiere rol Admin o Camarero)*
-- **DELETE /table/:id**: Elimina una mesa. *(Requiere rol Admin o Camarero)*
+- `GET /table/`: Obtiene todas las mesas. *(Requiere autenticación)*
+- `GET /table/:id`: Obtiene una mesa específica. *(Requiere autenticación)*
+- `POST /table/`: Crea una nueva mesa. *(Requiere rol Admin o Camarero)*
+- `PUT /table/:id`: Actualiza una mesa. *(Requiere rol Admin o Camarero)*
+- `DELETE /table/:id`: Elimina una mesa. *(Requiere rol Admin o Camarero)*
 
 ### Usuarios
 
-- **GET /user/**: Obtiene todos los usuarios. *(Requiere autenticación)*
-- **GET /user/:id**: Obtiene un usuario específico. *(Requiere autenticación)*
-- **POST /user/**: Crea un nuevo usuario. *(Requiere rol Admin)*
-- **PUT /user/:id**: Actualiza los datos de un usuario. *(Requiere rol Admin)*
-- **DELETE /user/:id**: Elimina un usuario. *(Requiere rol Admin)*
+- `GET /user/`: Obtiene todos los usuarios. *(Requiere autenticación)*
+- `GET /user/:id`: Obtiene un usuario específico. *(Requiere autenticación)*
+- `POST /user/`: Crea un nuevo usuario. *(Requiere rol Admin)*
+- `PUT /user/:id`: Actualiza los datos de un usuario. *(Requiere rol Admin)*
+- `DELETE /user/:id`: Elimina un usuario. *(Requiere rol Admin)*
 
 ### Autenticación
 
-- **POST /login**: Permite a un usuario iniciar sesión y obtener un token JWT.
+- `POST /login`: Permite a un usuario iniciar sesión y obtener un token JWT.
 
 ---
 
