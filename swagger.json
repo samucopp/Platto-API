@@ -55,7 +55,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Login/Request"
+                                "ref": "#/components/schemas/Login/Request"
                             },
                             "example": {
                                 "user_name": "admin",
@@ -70,7 +70,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Login/Response"
+                                    "ref": "#/components/schemas/Login/Response"
                                 },
                                 "example": {
                                     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MjI0MjQ3NjV9.6fjV3j4K9nVb2Zl2Zl2Zl2Zl2Zl2Zl2"
@@ -83,7 +83,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Errors/INVALID_CREDENTIALS"
+                                    "ref": "#/components/schemas/Errors/INVALID_CREDENTIALS"
                                 },
                                 "example": {
                                     "message": "Credenciales incorrectas"
@@ -96,7 +96,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Errors/USER_NOT_FOUND"
+                                    "ref": "#/components/schemas/Errors/USER_NOT_FOUND"
                                 },
                                 "example": {
                                     "message": "Usuario no encontrado"
@@ -109,7 +109,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Errors/SERVER_ERROR"
+                                    "ref": "#/components/schemas/Errors/SERVER_ERROR"
                                 },
                                 "example": {
                                     "message": "Error interno del servidor"
@@ -306,7 +306,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -381,7 +382,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -390,6 +392,13 @@
                         "application/json": {
                             "schema": {
                                 "ref": "#/components/schemas/UpdateProductRequest"
+                            },
+                            "example": {
+                                "name": "Ensalada César",
+                                "price": 980,
+                                "category_id": 1,
+                                "description": "Ensalada con pollo, queso parmesano y aderezo César",
+                                "allergens": "Lácteos"
                             }
                         }
                     },
@@ -485,7 +494,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -1068,7 +1078,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -1135,7 +1146,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -1230,7 +1242,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -1460,7 +1473,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -1529,7 +1543,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -1642,7 +1657,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -1989,7 +2005,7 @@
                 }
             }
         },
-        "/command/complete/{id}": {
+        "/command/{id}/details": {
             "get": {
                 "tags": [
                     "Command"
@@ -2008,7 +2024,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -2197,7 +2214,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -2362,7 +2380,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -2373,12 +2392,13 @@
                                 "ref": "#/components/schemas/Command/UpdateRequest"
                             },
                             "example": {
-                                "date": "2023-08-01T13:00:00.000Z",
-                                "table_id": 1,
-                                "user_id": 1,
-                                "pax": 2,
-                                "notes": "Alergia al marisco",
-                                "discount": 10
+                                "date": "2024-12-07T13:45:00.000Z",
+                                "status": "en preparacion",
+                                "table_id": 3,
+                                "user_id": 3,
+                                "pax": 3,
+                                "notes": null,
+                                "discount": 0
                             }
                         }
                     },
@@ -2506,7 +2526,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -2582,7 +2603,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -2688,7 +2710,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -2793,7 +2816,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -2819,28 +2843,39 @@
                                     "ref": "#/components/schemas/Command/CompleteResponse"
                                 },
                                 "example": {
-                                    "id": 1,
-                                    "date": "2023-08-01T13:00:00.000Z",
+                                    "command_id": 2,
+                                    "date": "2024-12-07T14:30:00.000Z",
                                     "time": "comida",
                                     "status": "en preparacion",
-                                    "pax": 2,
-                                    "table_id": 1,
-                                    "user_id": 1,
-                                    "user_name": "umpa_lumpa1",
-                                    "notes": "Alergia al marisco",
-                                    "discount": 10,
-                                    "total": 100,
+                                    "pax": 4,
+                                    "table_id": 6,
+                                    "user_id": 2,
+                                    "user_name": "umpa_lumpa2",
+                                    "notes": "Alergia a la lactosa",
+                                    "discount": 5,
+                                    "total": 8835,
                                     "Products": [
                                         {
                                             "category_id": 1,
-                                            "category_name": "Bebidas",
-                                            "id": 1,
-                                            "name": "Hamburguesa",
-                                            "notes": "Sin lechuga",
-                                            "discount": 0,
-                                            "price": 100,
+                                            "category_name": "Principal",
+                                            "product_id": 8,
+                                            "name": "Campari Spritz",
+                                            "notes": null,
+                                            "discount": 10,
+                                            "price": 600,
                                             "quantity": 2,
-                                            "subtotal": 200
+                                            "subtotal": 1080
+                                        },
+                                        {
+                                            "category_id": 4,
+                                            "category_name": "Especialidades del día",
+                                            "product_id": 28,
+                                            "name": "Cola de corvina a la brasa con salsa de txakoli y setas y crema de apionabo",
+                                            "notes": null,
+                                            "discount": 0,
+                                            "price": 3000,
+                                            "quantity": 1,
+                                            "subtotal": 3000
                                         }
                                     ]
                                 }
@@ -2897,7 +2932,8 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],

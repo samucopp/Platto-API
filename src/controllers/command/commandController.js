@@ -172,7 +172,8 @@ async function addProduct(command_id, product_id, quantity) {
 async function removeProduct(command_id, product_id) {
     const command = await getByIdFull(command_id);
     await command.removeProduct(product_id);
-    return command;
+    const cleanCommand = helper.cleanData(command);
+    return cleanCommand;
 };
 
 async function updateProduct(command_id, product_id, quantity) {
