@@ -97,7 +97,6 @@ async function getFullOne(req, res) {
 async function create(req, res) {
     try {
         const { table_id, user_id, pax, notes } = req.body;
-        //const user_id = req.user_id;
         const newCommand = await commandController.create(table_id, user_id, pax, notes);
         res.status(201).json({command:newCommand});
     } catch (error) {
