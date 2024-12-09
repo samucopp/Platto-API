@@ -3080,7 +3080,30 @@
                         ]
                     },
                     "UpdateRequest": {
-                        "ref": "#/components/schemas/CreateProductRequest"
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "price": {
+                                "type": "number"
+                            },
+                            "category_id": {
+                                "type": "integer"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "allergens": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "price",
+                            "category_id",
+                            "description"
+                        ]
                     },
                     "Response": {
                         "type": "object",
