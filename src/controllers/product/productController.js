@@ -9,6 +9,15 @@ async function getAll() {
     return products;
 };
 
+async function getAllByCategory(category_id) {
+    const products = await productModel.findAll({
+        where: {
+            category_id
+        },
+    });
+    return products;
+};
+
 async function getById(id) {
     const product = await productModel.findByPk(id, {
         include: productCategoryModel
@@ -74,6 +83,7 @@ async function remove(id) {
 
 export const functions = {
     getAll,
+    getAllByCategory,
     getById,
     create,
     update,

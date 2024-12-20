@@ -15,6 +15,22 @@ async function getAll(req, res) {
 }
 };
 
+async function getAllByCategory(req, res) {
+    try {
+        const id = parseInt(req.params.id);
+        const products = await productController.getAllByCategory(id);
+        res.status(200).json(products);
+    } catch (error) {
+        console.log(error);
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
+    }
+};
+
 async function getOne(req, res) {
     try {
         const id = parseInt(req.params.id);
@@ -82,6 +98,7 @@ async function remove(req, res) {
 
 export const functions = {
     getAll,
+    getAllByCategory,
     getOne,
     create,
     update,

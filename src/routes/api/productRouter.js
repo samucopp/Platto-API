@@ -5,6 +5,7 @@ import middleware from "../../middleware/api/authMiddleware.js";
 const router = Router();
 
 router.get("/", middleware.isAuthenticated, productApiController.getAll);
+router.get("/category/:id", middleware.isAuthenticated, productApiController.getAllByCategory);
 router.get("/:id", middleware.isAuthenticated, productApiController.getOne);
 
 router.post("/", middleware.isAdminOrChef, productApiController.create);
