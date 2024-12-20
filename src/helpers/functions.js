@@ -45,7 +45,7 @@ function cleanData(data) {
             category_id: product.category_id,
             category_name: product.Product_category.name,
             product_id: product.product_id,
-            name: product.name,
+            name: product.name_short,
             notes: product.Command_details.notes,
             discount: product.Command_details.discount,
             price: product.price,

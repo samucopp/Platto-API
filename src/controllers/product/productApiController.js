@@ -49,8 +49,8 @@ async function getOne(req, res) {
 
 async function create(req, res) {
     try {
-        const { name, price, category_id, description, allergens } = req.body;
-        const newProduct = await productController.create(name, price, category_id, description, allergens);
+        const { name_short, name, price, category_id, description, allergens } = req.body;
+        const newProduct = await productController.create(name_short,name, price, category_id, description, allergens);
         res.status(201).json({product:newProduct});
     } catch (error) {
         console.log(error);
@@ -66,8 +66,8 @@ async function create(req, res) {
 async function update(req, res) {
     try {
         const id = parseInt(req.params.id);
-        const { name, price, category_id, description, allergens } = req.body;
-        const updatedProduct = await productController.update(id, name, price, category_id, description, allergens);
+        const { name_short, name, price, category_id, description, allergens } = req.body;
+        const updatedProduct = await productController.update(id, name_short, name, price, category_id, description, allergens);
         res.status(200).json({product:updatedProduct});
     } catch (error) {
         console.log(error);

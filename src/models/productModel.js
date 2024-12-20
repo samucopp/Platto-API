@@ -10,6 +10,10 @@ const Product = sequelize.define("Product", {
         autoIncrement: true,
         unique: true
     },
+    name_short: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     name: {
         type: DataTypes.STRING,
         allowNull: false
