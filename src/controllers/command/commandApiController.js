@@ -94,10 +94,27 @@ async function getFullOne(req, res) {
     }
 };
 
+async function getByTableIdFull(req, res) {
+    try {
+        const id = parseInt(req.params.id);
+        const command = await commandController.getByTableIdFull(id, true);
+        res.status(200).json(command);
+    } catch (error) {
+        console.log(error);
+        if(error.status) {
+            res.status(error.status);
+        } else {
+            res.status(500);
+        }
+        res.json({ error: error.message });
+    }
+};
+
 async function create(req, res) {
     try {
-        const { table_id, user_id, pax, notes } = req.body;
-        const newCommand = await commandController.create(table_id, user_id, pax, notes);
+        const { table_id, pax } = req.body;
+        const user_id = req.user_id;
+        const newCommand = await commandController.create(table_id, user_id, pax);
         res.status(201).json({command:newCommand});
     } catch (error) {
         console.log(error);
@@ -217,6 +234,7 @@ export const functions = {
     getHistoryById,
     getOne,
     getFullOne,
+    getByTableIdFull,
     create,
     update,
     remove,

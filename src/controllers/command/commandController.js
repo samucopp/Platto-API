@@ -63,11 +63,33 @@ async function getByIdFull(id, clean = false) {
         throw new error.COMMAND_NOT_FOUND();
     };
     if (clean) {
-    const cleanCommand = helper.cleanData(command);
-    return cleanCommand;
+        const cleanCommand = helper.cleanData(command);
+        return cleanCommand;
     };
     return command;
 };
+
+async function getByTableIdFull(table_id, clean = false) {
+    const command = await commandModel.findOne({
+        where: { table_id },
+        include: [
+            {
+                model: productModel,
+                include: ProductCategoryModel
+            },
+            userModel
+        ]
+    });
+    if (!command) {
+        throw new error.COMMAND_NOT_FOUND();
+    }
+    if (clean) {
+        const cleanCommand = helper.cleanData(command);
+        return cleanCommand;
+    }
+    return command;
+}
+
 
 async function create(table_id, user_id, pax, notes = null, discount = null) {
     const date = new Date();
@@ -165,7 +187,9 @@ async function addProduct(command_id, product_id, quantity) {
         totalQuantity += product.Command_details.quantity;
     };
     await command.addProduct(product_id, { through: { quantity: totalQuantity } });
-    const cleanCommand = helper.cleanData(command);
+    const newCommand = await getByIdFull(command_id);
+    console.log("command", command.Products);
+    const cleanCommand = helper.cleanData(newCommand);
     return cleanCommand;
 };
 
@@ -191,6 +215,7 @@ export const functions = {
     getHistoryById,
     getById,
     getByIdFull,
+    getByTableIdFull,
     create,
     update,
     remove,

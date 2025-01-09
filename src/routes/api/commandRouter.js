@@ -10,6 +10,7 @@ router.get("/history", middleware.isAuthenticated, commandApiController.getHisto
 router.get("/history/:id", middleware.isAdmin, commandApiController.getHistoryById);
 router.get("/:id", middleware.isAuthenticated, commandApiController.getOne);
 router.get("/:id/details", middleware.isAuthenticated, commandApiController.getFullOne);
+router.get("/:id/table-details", middleware.isAuthenticated, commandApiController.getByTableIdFull);
 
 router.post("/", middleware.isAdminOrWaiter, commandApiController.create);
 router.post("/:id/add-product", middleware.isAdminOrWaiter, commandApiController.addProduct);

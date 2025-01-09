@@ -7,10 +7,10 @@ async function isAuthenticated(req,res,next){
     }
     const token = authorization.replace("Bearer ","");
     const verified = jwt.verify(token);
-    req.user_id = verified.user_id;
     if(verified.error){
         return res.status(401).json({error:"jwt token not correct"});
     }
+    req.user_id = verified.user_id;
     next();
 }
 async function isAdmin(req,res,next){
@@ -26,6 +26,7 @@ async function isAdmin(req,res,next){
     if(!verified.role || verified.role !== "admin"){
         return res.status(403).json({error:"not allowed"});
     }
+    req.user_id = verified.user_id;
     next();
 }
 
@@ -42,6 +43,7 @@ async function isAdminOrWaiter(req,res,next){
     if((!verified.role || (verified.role !== "admin" && verified.role !== "camarero"))){
         return res.status(403).json({error:"not allowed"});
     }
+    req.user_id = verified.user_id;
 
     next();
 }

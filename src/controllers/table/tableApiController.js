@@ -34,7 +34,7 @@ async function getOne(req, res) {
 async function create(req, res) {
     try {
         const { capacity } = req.body;
-        const newTable = await tableController.create(capacity);
+        const newTable = await tableController.create(parseInt(capacity));
         res.status(201).json({table:newTable});
     } catch (error) {
         console.log(error);
@@ -51,7 +51,7 @@ async function update(req, res) {
     try {
         const id = parseInt(req.params.id);
         const { capacity } = req.body;
-        const updatedTable = await tableController.update(id, capacity);
+        const updatedTable = await tableController.update(id, parseInt(capacity));
         res.status(200).json({table:updatedTable});
     } catch (error) {
         console.log(error);
